@@ -1,0 +1,13 @@
+{
+	"startType": "dev",
+	"dev": {
+		"appName": "cmkz-fc-web",
+		"ctx": "/kb-api",
+		"imgUrl": "/"
+	},
+	"prod": {
+		"appName": "cmkz-fc-web",
+		"ctx": "/kb-api",
+		"imgUrl": "/cmkz-fc-web/"
+	}
+}
