@@ -41,7 +41,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(config.ctx+"/upload",express.static(path.join(__dirname, 'upload')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use(config.ctx, apiRouter);
 
 // catch 404 and forward to error handler

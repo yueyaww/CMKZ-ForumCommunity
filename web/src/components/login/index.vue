@@ -128,13 +128,13 @@
               <i class="h-icon-message"></i>                 
             </div>
             <div class="h-input h-input-prefix-icon">
-              <input type="password" name="password" v-model="注册模型.密码" placeholder="输入密码" @keyup.enter="submit" />
+              <input type="password" name="password" v-model="注册模型.密码" placeholder="输入密码" />
               <i class="h-icon-lock"></i>
             </div>
           </div>
           <p @click="登录页 = true" class="zhuce">已有账号，<a>登录</a></p>
           <div class="buttonDiv">
-            <Button block color="primary" size="l" @click="submit">
+            <Button block color="primary" size="l" @click="zhuce_anniu">
               注册
             </Button>
           </div>
@@ -156,9 +156,9 @@
     data() {
       return {
         innerHeight: window.innerHeight,
-        model: {
-          username: '',
-          password: ''
+        登录模型: {
+          账号: '',
+          密码: ''
         },
         注册模型: {
           手机号: '',
@@ -185,15 +185,27 @@
       });
     },
     methods: {
-      注册页(){
-        登录页 = false;
+      zhuce_anniu(){
+        R.用户.注册(this.注册模型).then(resp => {
+          if (resp.ok) {
+            this.$router.push({
+              path: "/"
+            });
+            this.spaceboi.stop();
+          } else {
+            this.$Message({
+              type: "error",
+              text: `注册失败，稍后再试。`
+            });
+          }
+        });
       },
-      submit() {
-        R.Login.login(this.model).then(resp => {
+      denglu() {
+        R.用户.登录(this.登录模型).then(resp => {
           if (resp.ok) {
             let user = resp.body;
 
-            Utils.saveCookie('kb-token-cookie', user._id, null, "/", 60 * this.preference.logoutLimit);
+            Utils.saveCookie('kb-token-cookie', user._id, null, "/", 60);
             Utils.saveSessionLocal('kb-token-session', user);
 
             G.set('SYS_MENUS', user.role.menus);
@@ -227,7 +239,7 @@
       },
       initLottie() {
         let lottieList = [];
-        for (let i = 1; i <= 18; i++) {
+        for (let i = 1; i <= 16; i++) {
           lottieList.push(`${G.get('imgUrl')}src/static/lottie/${i}.json`);
         }
         const random = Math.floor(Math.random() * lottieList.length);

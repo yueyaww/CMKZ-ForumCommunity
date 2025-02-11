@@ -32,7 +32,7 @@ module.exports = {
     },
     devServer: {
       proxy: {
-        '/kb-api': {
+        '/cmkz-fc-api': {
           target: 'http://localhost:3000'
         }
       },

@@ -5,8 +5,8 @@ import Utils from './utils';
 const DefaultParam = { repeatable: false };
 
 let ajax = {
-  PREFIX: '/api',
-  Author: Utils.getAuthor() || 'heyui',
+  PREFIX: G.get("ctx"),
+  Author: Utils.getAuthor() || 'yueya',
   requestingApi: new Set(),
   extractUrl: function (url) {
     return url ? url.split('?')[0] : '';
@@ -56,10 +56,11 @@ let ajax = {
       data: paramJson
     }, extendParam);
   },
-  delete: function (url, extendParam) {
+  delete: function (url, paramJson,extendParam) {
     return this.ajax({
       url: url,
-      method: 'DELETE'
+      method: 'DELETE',
+      data: paramJson
     }, extendParam);
   },
   ajax: function (param, extendParam) {
@@ -79,7 +80,7 @@ let ajax = {
     }
     let header = {
       author: this.Author,
-      Authorization: Utils.getLocal('token')
+      Authorization: Utils.getLocal('bbk-token')
     };
     let defaultParam = {
       headers: header,
@@ -107,7 +108,7 @@ let ajax = {
         // }
         if (status != 200) {
           if (status == 401) {
-            window.top.location = '/login';
+            window.top.location = '/';
             return;
           }
           if (status == 500) {
