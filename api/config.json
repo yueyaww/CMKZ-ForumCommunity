@@ -1,0 +1,6 @@
+{
+	"uploadPath": "./upload",
+	"dbName": "cmkz-fc-v1",
+	"ctx": "/cmkz-fc-api",
+	"port": "3000" 
+}

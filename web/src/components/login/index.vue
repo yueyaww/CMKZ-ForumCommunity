@@ -14,9 +14,8 @@
   .login-content {
     border-radius: 10px;
     background-color: aliceblue;
-    padding: 50px 40px;
+    padding: 20px 30px 10px 30px;
     margin-left: 50px;
-    ;
   }
 
   .login-title {
@@ -52,7 +51,7 @@
   }
 
   .buttonDiv {
-    margin-top: 45px;
+    margin-top: 10px;
   }
 
   .buttonDiv .h-btn {
@@ -77,6 +76,13 @@
     align-items: center;
     justify-content: center;
   }
+  .zhuce {
+    margin: 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
 
 <template>
@@ -89,26 +95,49 @@
       </div>
       <div class="login-content">
         <div class="login-title">
-          <!-- <span class="app-logo-icon"
-            style="background-image: url('/static/images/src/images/logo.png')"></span> -->
             <span class="app-logo-icon"
             :style="{backgroundImage:'url('+imgUrl+'static/images/src/images/logo.png)'}"></span>
             论坛社区
         </div>
-        <div class="login-input">
-          <div class="h-input h-input-prefix-icon">
-            <input type="text" name="username" v-model="model.username" autocomplete="off" />
-            <i class="h-icon-user"></i>
+        <div v-show="登录页">
+          <div class="login-input">
+            <div class="h-input h-input-prefix-icon">
+              <input type="text" name="username" v-model="model.username" placeholder="手机号/用户名" />
+              <i class="h-icon-user"></i>
+            </div>
+            <div class="h-input h-input-prefix-icon">
+              <input type="password" name="password" v-model="model.password" @keyup.enter="submit" />
+              <i class="h-icon-lock"></i>
+            </div>
           </div>
-          <div class="h-input h-input-prefix-icon">
-            <input type="password" name="password" v-model="model.password" @keyup.enter="submit" />
-            <i class="h-icon-lock"></i>
+          <p @click="登录页 = false" class="zhuce">没有账号，<a>注册</a></p>
+          <div class="buttonDiv">
+            <Button block color="primary" size="l" @click="submit">
+              登录
+            </Button>
           </div>
         </div>
-        <div class="buttonDiv">
-          <Button block color="primary" size="l" @click="submit">
-            登录
-          </Button>
+        <div v-show="!登录页">
+          <div class="login-input">
+            <div class="h-input h-input-prefix-icon">
+              <input type="text" name="username" v-model="注册模型.手机号" placeholder="输入手机号"/>
+              <i class="h-icon-user"></i>                 
+            </div>
+            <div class="h-input h-input-prefix-icon">
+              <input type="text" name="username" v-model="注册模型.验证码" placeholder="输入验证码"/>
+              <i class="h-icon-message"></i>                 
+            </div>
+            <div class="h-input h-input-prefix-icon">
+              <input type="password" name="password" v-model="注册模型.密码" placeholder="输入密码" @keyup.enter="submit" />
+              <i class="h-icon-lock"></i>
+            </div>
+          </div>
+          <p @click="登录页 = true" class="zhuce">已有账号，<a>登录</a></p>
+          <div class="buttonDiv">
+            <Button block color="primary" size="l" @click="submit">
+              注册
+            </Button>
+          </div>
         </div>
         <p class="copyright"> Copyright ©{{year}} 轲目苦津</p>
       </div>
@@ -131,11 +160,17 @@
           username: '',
           password: ''
         },
+        注册模型: {
+          手机号: '',
+          验证码: '0389',
+          密码: ''
+        },
         ctx: G.get('ctx'),
         imgUrl: G.get('imgUrl'),
         year: Manba().year(),
         loginContent: false,
-        spaceboi: null
+        spaceboi: null,
+        登录页: true
       };
     },
     created() {
@@ -150,6 +185,9 @@
       });
     },
     methods: {
+      注册页(){
+        登录页 = false;
+      },
       submit() {
         R.Login.login(this.model).then(resp => {
           if (resp.ok) {

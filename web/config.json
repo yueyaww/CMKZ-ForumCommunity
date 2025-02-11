@@ -2,12 +2,12 @@
 	"startType": "dev",
 	"dev": {
 		"appName": "cmkz-fc-web",
-		"ctx": "/kb-api",
+		"ctx": "/cmkz-fc-api",
 		"imgUrl": "/"
 	},
 	"prod": {
 		"appName": "cmkz-fc-web",
-		"ctx": "/kb-api",
+		"ctx": "/cmkz-fc-api",
 		"imgUrl": "/cmkz-fc-web/"
 	}
 }
