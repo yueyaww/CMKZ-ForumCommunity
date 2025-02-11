@@ -89,8 +89,10 @@
       </div>
       <div class="login-content">
         <div class="login-title">
-          <span class="app-logo-icon"
-            style="background-image: url('/static/images/src/images/logo.png')"></span>
+          <!-- <span class="app-logo-icon"
+            style="background-image: url('/static/images/src/images/logo.png')"></span> -->
+            <span class="app-logo-icon"
+            :style="{backgroundImage:'url('+imgUrl+'static/images/src/images/logo.png)'}"></span>
             论坛社区
         </div>
         <div class="login-input">
@@ -130,6 +132,7 @@
           password: ''
         },
         ctx: G.get('ctx'),
+        imgUrl: G.get('imgUrl'),
         year: Manba().year(),
         loginContent: false,
         spaceboi: null

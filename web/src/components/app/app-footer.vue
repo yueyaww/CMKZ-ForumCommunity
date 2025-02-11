@@ -11,7 +11,7 @@
 
 <template>
   <div class="app-footer">
-    Copyright © {{year}} CMKZ
+    Copyright © {{year}} 轲目苦津
   </div>
 </template>
 <script>

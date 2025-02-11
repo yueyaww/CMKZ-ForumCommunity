@@ -106,7 +106,7 @@ import appHeaderMessage from './modules/app-header-message';
 
 export default {
   components: {
-    appHeaderMessage
+    // appHeaderMessage
   },
   data() {
     return {
