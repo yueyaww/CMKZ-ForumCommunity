@@ -45,6 +45,9 @@
         <div class="h-panel">
           <div class="h-panel-bar">
             <div class="h-panel-title">用户</div>
+            <div style="float:right">
+              <Button color="primary" icon="h-icon-edit" size="s" @click="EditUser"></Button>
+            </div>
           </div>
           <div class=" h-panel-body home-part-body">
             <Menu :datas="users" ref="menuUsers" className="h-menu-white" :option="option"></Menu>
@@ -59,6 +62,7 @@
 </template>
 <script>
   import {fullMenus} from 'js/config/menu-config';
+  import ModalAddUser from "./modal/user.vue";
   
   export default {
     data() {
@@ -110,6 +114,30 @@
           if (this.users.length > 0) {
             this.user = this.users[0];
             this.$refs.menuUsers.select(this.user._id);
+          }
+        });
+      },
+      EditUser(){
+        if(this.user.用户名 == 'admin'){
+          this.$Notice({
+            type: 'error',
+            title: "失败",
+            content: '不能编辑admin'
+          });
+          return;
+        }
+        this.$Modal({
+          middle: true,
+          hasDivider: true,
+          closeOnMask: false,
+          component: {
+            vue: ModalAddUser,
+            datas: {roles: this.roles, data: this.user}
+          },
+          events: {
+            success: (modal, data) => {
+              this.getUsers();
+            }
           }
         });
       },

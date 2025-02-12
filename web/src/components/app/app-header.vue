@@ -152,7 +152,9 @@ export default {
     },
     trigger(data) {
       if (data == 'logout') {
+        Utils.saveLocal('SYS_TABS', []);
         Utils.removeCookie('token-cookie')
+        Utils.removeSessionLocal('token-session');
         this.$router.replace({ name: 'Login' });
       } else {
         this.$router.push({ name: 'Gerenzhongxin' });

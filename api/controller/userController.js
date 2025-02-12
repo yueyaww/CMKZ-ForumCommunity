@@ -80,3 +80,19 @@ exports.gets = (req, res) =>{
 		}
 	});
 };
+
+exports.get = (req,res) =>{
+	User.findOne()
+	.where({'_id': req.query.id})
+	.populate('权限')
+	.exec((err,doc) =>{
+		if(!err){
+			res.json({
+				status: 200,
+				body: doc
+			});
+		}else{
+			res.status(500).end();
+		}
+	});
+};

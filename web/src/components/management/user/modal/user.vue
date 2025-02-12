@@ -5,18 +5,7 @@
     <div style="padding:15px">
       <Form ref="form" :rules="validationRules" :model="model">
         <FormItem label="角色" prop="role">
-          <Select v-model="model.role" :datas="roles" keyName="_id" titleName="name"></Select>
-        </FormItem>
-        <FormItem label="用户组" prop="userGroups">
-          <Select v-model="model.userGroups" :datas="userGroups" keyName="_id" titleName="name" :multiple="true"></Select>
-        </FormItem>
-        <FormItem label="用户名" prop="username">
-          <template v-slot:label>用户名</template>
-          <input type="text" v-model="model.username">
-        </FormItem>
-        <FormItem label="密码" prop="password">
-          <template v-slot:label>密码</template>
-          <input type="text" v-model="model.password">
+          <Select v-model="model.权限" :datas="roles" keyName="_id" titleName="name" :deletable="false"></Select>
         </FormItem>
       </Form>
     </div>
@@ -31,43 +20,36 @@
 <script>
   export default {
     props: {
-      userGroups: Array,
       roles: Array,
-      data: Object,
-      ugId: String
+      data: Object
     },
     data() {
       return {
         model: {
-          username: '',
-          password: '',
-          userGroups: [this.ugId],
-          role: ''
+          权限: '',
+          _id: ''
         },
         validationRules: {
-          required: ['username','password','userGroups', 'role']
         },
         isLoading: false
       };
     },
     mounted() {
       if(this.data){
-        R.User.get({'id': this.data._id}).then(res =>{
-          this.model = res.body;
-        });
+        this.model.权限 = this.data.权限._id;
+        this.model._id = this.data._id;
       }
     },
     methods: {
       success() {
         let validResult = this.$refs.form.valid();
         if (validResult.result) {
-          this.$Loading();
-        	R.User.save(this.model).then(res =>{
+        	R.User.update(this.model).then(res =>{
         		if (res.ok) {
         		  this.$Notice({
         		    type: 'success',
         		    title: "成功",
-        		    content: "添加"
+        		    content: ""
         		  });
         		  this.$emit('success', this.model);
         		  this.close();
@@ -79,7 +61,6 @@
         		  });
         		}
         	});
-          this.$Loading.close();
         } 
       },
       close() {

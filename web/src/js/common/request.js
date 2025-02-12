@@ -10,6 +10,12 @@ const Request = {
     },
     gets() {
       return Ajax.get('/users');
+    },
+    get(param) {
+      return Ajax.get('/user', param);
+    },
+    update(param) {
+      return Ajax.postJson('/user/update', param);
     }
   },
   Role:{

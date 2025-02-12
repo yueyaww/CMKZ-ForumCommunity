@@ -25,7 +25,7 @@ const initRouter = () => {
           meta: {
             title: '首页',
             icon: 'icon-monitor',
-            // auth: true
+            auth: true
           }
         }, {
           path: '/system-error',
@@ -74,19 +74,19 @@ const initRouter = () => {
   let isFirstRouter = true;
 
   router.beforeEach((to, from, next) => {
-    // let session = Utils.getSessionLocal2Json('kb-token-session');
-    // console.log(!session);
-    // if (to.matched.some(record => record.meta.auth) && !session) {
-    //   next({
-    //     path: '/login',
-    //     query: {
-    //       redirect: to.fullPath
-    //     }
-    //   })
-    //   return;
-    // } else {
-    //   next();
-    // }
+    let session = Utils.getSessionLocal2Json('token-session');
+    console.log(!session);
+    if (to.matched.some(record => record.meta.auth) && !session) {
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+      return;
+    } else {
+      next();
+    }
     if (!isFirstRouter && !isAuthPage(to.name)) {
       next({
         name: 'PermissionError'

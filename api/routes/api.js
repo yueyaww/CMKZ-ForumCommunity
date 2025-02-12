@@ -21,6 +21,8 @@ let userController = require('../controller/userController.js');
 router.post('/user/zhuce', userController.zhuce);
 router.post('/user/denglu', userController.denglu);
 router.get('/users',userController.gets);
+router.get('/user',userController.get);
+router.post('/user/update', userController.update);
 
 let roleController =  require('../controller/roleController.js');
 router.get('/roles',roleController.gets);
