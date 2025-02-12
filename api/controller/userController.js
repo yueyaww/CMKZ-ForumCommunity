@@ -62,3 +62,21 @@ exports.update = (req, res) =>{
 		status: 200
 	});
 };
+
+exports.gets = (req, res) =>{
+	let param = req.query;
+	let sql = {};
+	User.find()
+	.where(sql)
+	.populate('权限')
+	.exec((err,docs) =>{
+		if(!err){
+			res.json({
+				status: 200,
+				body: docs
+			});
+		}else{
+			res.status(500).end();
+		}
+	});
+};

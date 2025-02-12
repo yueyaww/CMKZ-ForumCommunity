@@ -80,6 +80,7 @@
     },
     mounted() {
       this.getRoles();
+      this.getUsers();
     },
     methods: {
       getRoles() {
@@ -95,12 +96,12 @@
           }
         });
       },
-      getUser(userGroupId) {
-        R.User.gets({ugId: userGroupId}).then(resp => {
+      getUsers(userGroupId) {
+        R.User.gets().then(resp => {
           if (resp.ok) {
             this.users = [];
             for (let user of resp.body) {
-              user.name = `[${user.role.name}] ${user.username}`;
+              user.name = `[${user.权限.name}] ${user.用户名}`;
               this.users.push();
             }
             this.users = resp.body;

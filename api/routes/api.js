@@ -20,6 +20,7 @@ var upload = multer({ storage: storage });
 let userController = require('../controller/userController.js');
 router.post('/user/zhuce', userController.zhuce);
 router.post('/user/denglu', userController.denglu);
+router.get('/users',userController.gets);
 
 let roleController =  require('../controller/roleController.js');
 router.get('/roles',roleController.gets);

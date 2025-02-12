@@ -102,7 +102,7 @@
         <div v-show="登录页">
           <div class="login-input">
             <div class="h-input h-input-prefix-icon">
-              <input type="text" v-model="登录模型.账号" placeholder="手机号/用户名" />
+              <input type="text" v-model="登录模型.账号" placeholder="手机号/用户名/邮箱" />
               <i class="h-icon-user"></i>
             </div>
             <div class="h-input h-input-prefix-icon">

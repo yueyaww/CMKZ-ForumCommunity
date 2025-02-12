@@ -7,6 +7,9 @@ const Request = {
     },
     denglu(param) {
       return Ajax.postJson('/user/denglu', param);
+    },
+    gets() {
+      return Ajax.get('/users');
     }
   },
   Role:{
