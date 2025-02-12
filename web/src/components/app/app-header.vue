@@ -95,7 +95,7 @@
       </div> -->
       <!-- <appHeaderMessage></appHeaderMessage> -->
       <DropdownMenu className="app-header-dropdown" trigger="hover" offset="0,5" :width="150" placement="bottom-end" :datas="infoMenu" @onclick="trigger">
-        <Avatar :src="User.avatar" :width="30"><span>{{User.name}}</span></Avatar>
+        <Avatar :width="30"><span>{{user.用户名}}</span></Avatar>
       </DropdownMenu>
     </div>
   </div>
@@ -114,11 +114,11 @@ export default {
       infoMenu: [
         // { key: 'info', title: '个人信息', icon: 'h-icon-user' },
         { key: 'logout', title: '退出登录', icon: 'h-icon-outbox' }
-      ]
+      ],
+      user: Utils.getSessionLocal2Json("token-session")
     };
   },
   computed: {
-    ...mapState(['User']),
     siderCollapsed: {
       get() {
         return this.$store.state.siderCollapsed;
@@ -126,10 +126,11 @@ export default {
       set(value) {
         this.$store.commit('updateSiderCollapse', value);
       }
-    }
+    },
   },
   mounted() {
     this.listenResize();
+    console.log(Utils.getSessionLocal2Json("token-session"));
   },
   methods: {
     listenResize() {
@@ -152,7 +153,7 @@ export default {
     },
     trigger(data) {
       if (data == 'logout') {
-        Utils.removeLocal('token');
+        Utils.removeCookie('token-cookie')
         this.$router.replace({ name: 'Login' });
       } else {
         this.$router.push({ name: 'AccountBasic' });

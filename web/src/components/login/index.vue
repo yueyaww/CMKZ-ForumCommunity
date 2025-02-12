@@ -102,17 +102,25 @@
         <div v-show="登录页">
           <div class="login-input">
             <div class="h-input h-input-prefix-icon">
-              <input type="text" name="username" v-model="model.username" placeholder="手机号/用户名" />
+              <input type="text" v-model="登录模型.账号" placeholder="手机号/用户名" />
               <i class="h-icon-user"></i>
             </div>
             <div class="h-input h-input-prefix-icon">
-              <input type="password" name="password" v-model="model.password" @keyup.enter="submit" />
+              <input type="password" v-model="登录模型.密码" @keyup.enter="denglu_anniu" placeholder="密码"/>
               <i class="h-icon-lock"></i>
+            </div>
+            <div class="h-input-group">
+              <img :src="captchaImage" alt="验证码" style="width: 183px;height: 40px;"/>
+              <Button icon="h-icon-refresh" @click="refreshCaptcha"></Button>
+            </div>
+            <div class="h-input h-input-prefix-icon">
+              <input type="text" v-model="登录模型.验证码" placeholder="验证码" />
+              <i class="h-icon-edit"></i>
             </div>
           </div>
           <p @click="登录页 = false" class="zhuce">没有账号，<a>注册</a></p>
           <div class="buttonDiv">
-            <Button block color="primary" size="l" @click="submit">
+            <Button block color="primary" size="l" @click="denglu_anniu">
               登录
             </Button>
           </div>
@@ -120,15 +128,15 @@
         <div v-show="!登录页">
           <div class="login-input">
             <div class="h-input h-input-prefix-icon">
-              <input type="text" name="username" v-model="注册模型.手机号" placeholder="输入手机号"/>
+              <input type="text" v-model="注册模型.手机号" placeholder="输入手机号"/>
               <i class="h-icon-user"></i>                 
             </div>
-            <div class="h-input h-input-prefix-icon">
-              <input type="text" name="username" v-model="注册模型.验证码" placeholder="输入验证码"/>
-              <i class="h-icon-message"></i>                 
+            <div class="h-input-group" v-width="228">
+              <input type="text" v-model="注册模型.验证码" placeholder="输入验证码"/>
+              <Button>获取</Button>
             </div>
             <div class="h-input h-input-prefix-icon">
-              <input type="password" name="password" v-model="注册模型.密码" placeholder="输入密码" />
+              <input type="password" v-model="注册模型.密码" placeholder="输入密码" />
               <i class="h-icon-lock"></i>
             </div>
           </div>
@@ -158,7 +166,8 @@
         innerHeight: window.innerHeight,
         登录模型: {
           账号: '',
-          密码: ''
+          密码: '',
+          验证码: ''
         },
         注册模型: {
           手机号: '',
@@ -170,11 +179,18 @@
         year: Manba().year(),
         loginContent: false,
         spaceboi: null,
-        登录页: true
+        登录页: true,
+        captchaText: "", // 生成的验证码文本
       };
     },
     created() {
       this.listenResize();
+    },
+    computed: {
+      // 生成验证码图片的 URL
+      captchaImage() {
+        return this.generateCaptchaImage(this.captchaText);
+      },
     },
     mounted() {
       this.spaceboi = new Thpace(this.$refs.canvas, delaunator);
@@ -183,15 +199,36 @@
       this.$nextTick(() => {
         this.loginContent = true;
       });
+      // 初始化时生成验证码
+      this.refreshCaptcha();
     },
     methods: {
       zhuce_anniu(){
+        const phoneRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
+        if (!phoneRegex.test(this.注册模型.手机号)) {
+          this.$Message({
+            type: "error",
+            text: `请输入正确的手机号`
+          });
+          return;
+        }
+        if(!this.注册模型.手机号 || !this.注册模型.密码){
+          this.$Message({
+            type: "error",
+            text: `请输入用户名密码`
+          });
+          return;
+        }
+        if(!this.注册模型.验证码){
+          this.$Message({
+            type: "error",
+            text: `验证码不正确`
+          });
+          return;
+        }
         R.用户.注册(this.注册模型).then(resp => {
           if (resp.ok) {
-            this.$router.push({
-              path: "/"
-            });
-            this.spaceboi.stop();
+            this.denglu(resp.body);
           } else {
             this.$Message({
               type: "error",
@@ -200,22 +237,17 @@
           }
         });
       },
-      denglu() {
+      denglu_anniu() {
+        if(this.登录模型.验证码 !=  this.captchaText.toLowerCase()){
+          this.$Message({
+            type: "error",
+            text: `验证码不正确`
+          });
+          return;
+        }
         R.用户.登录(this.登录模型).then(resp => {
           if (resp.ok) {
-            let user = resp.body;
-
-            Utils.saveCookie('kb-token-cookie', user._id, null, "/", 60);
-            Utils.saveSessionLocal('kb-token-session', user);
-
-            G.set('SYS_MENUS', user.role.menus);
-            G.trigger('SYS_MENU_UPDATE');
-
-            this.$router.push({
-              path: "/"
-            });
-            this.spaceboi.stop();
-
+            this.denglu(resp.body);
           } else {
             this.$Message({
               type: "error",
@@ -224,6 +256,61 @@
           }
           this.loading = false;
         });
+      },
+      denglu(user){
+        Utils.saveCookie('token-cookie', user._id, null, "/", 60);
+        Utils.saveSessionLocal('token-session', user);
+        
+        this.$router.push({
+          path: "/"
+        });
+        this.spaceboi.stop();
+      },
+      // 生成验证码图片
+      generateCaptchaImage(text) {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+      
+        // 设置画布大小
+        canvas.width = 120;
+        canvas.height = 40;
+      
+        // 填充背景色
+        ctx.fillStyle = "#f0f0f0";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+        // 绘制验证码文本
+        ctx.font = "24px Arial";
+        ctx.fillStyle = "#333";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+      
+        // 添加干扰线
+        for (let i = 0; i < 5; i++) {
+          ctx.strokeStyle = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+          ctx.beginPath();
+          ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+          ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+          ctx.stroke();
+        }
+      
+        // 返回图片的 Data URL
+        return canvas.toDataURL();
+      },
+      // 生成随机验证码文本
+      generateCaptchaText() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let captcha = "";
+        for (let i = 0; i < 4; i++) {
+          captcha += chars[Math.floor(Math.random() * chars.length)];
+        }
+        return captcha;
+      },
+      // 刷新验证码
+      refreshCaptcha() {
+        this.captchaText = this.generateCaptchaText();
+        this.登录模型.验证码 = '';
       },
       listenResize() {
         const resizeEvent = window.addEventListener('resize', () => {
