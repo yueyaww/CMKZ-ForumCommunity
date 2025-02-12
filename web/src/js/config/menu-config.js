@@ -1,13 +1,20 @@
 const fullMenus = [
   {
-    title: 'Dashboard',
+    title: '首页',
     key: 'Home',
     icon: 'icon-monitor'
   },
   {
-    title: 'Icons',
-    key: 'Icons',
-    icon: 'icon-heart'
+    title: '设置',
+    key: 'SysSetting',
+    icon: 'icon-cog',
+    children: [
+      {
+        title: '用户',
+        key: 'UserManage',
+      	icon: 'icon-head'
+      }
+    ]
   }
 ];
 

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import demoComponents from './demo-components';
+import views from './router-views-config';
 import {
   isAuthPage
 } from 'js/config/menu-config';
@@ -19,13 +19,13 @@ const initRouter = () => {
       path: '/',
       component: (resolve) => require(['components/app/app-frame'], resolve),
       children: [{
-          path: '',
+          path: '/',
           name: 'Home',
           component: (resolve) => require(['components/home/index'], resolve),
           meta: {
             title: '首页',
             icon: 'icon-monitor',
-            auth: true
+            // auth: true
           }
         }, {
           path: '/system-error',
@@ -50,20 +50,14 @@ const initRouter = () => {
             title: '页面找不到'
           }
         }, {
-          path: '/authorization',
-          name: 'Authorization',
-          component: (resolve) => require(['components/management/authorization'], resolve),
-          meta: {
-            title: '权限管理'
-          }
-        }, {
-          path: '/users',
-          name: 'Users',
-          component: (resolve) => require(['components/management/users'], resolve),
-          meta: {
-            title: '用户管理'
-          }
+            path: '/users',
+            name: 'UserManage',
+            component: (resolve) => require(['components/management/user/index'], resolve),
+            meta: {
+              title: '用户管理'
+            }
         },
+        ...views,
         {
           path: '*',
           name: 'CommonNotfoundError',

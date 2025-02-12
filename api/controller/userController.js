@@ -1,14 +1,16 @@
-const 用户 = require('../model/用户.js');
+const User = require('../model/User.js');
 const crypto = require('crypto');
 
 exports.denglu = (req,res) =>{
 	let param = req.body;
-	用户.findOne({
+	User.findOne({
 	  $or: [
 	    { '手机号': param.账号 },
 	    { '用户名': param.账号 }
 	  ]
-	}).then(doc => {
+	})
+	.populate('权限')
+	.then(doc => {
 		if(doc){
 			let hashPassword = crypto
 			      .pbkdf2Sync(param.密码, doc.密码盐, 1000, 64, 'sha256')
@@ -36,7 +38,7 @@ exports.zhuce = (req, res) =>{
         .pbkdf2Sync(param.密码, salt, 1000, 64, 'sha256')
         .toString('hex'); 
 				
-	let user = new 用户(param);
+	let user = new User(param);
 	user.密码盐 = salt;
 	user.密码哈希 = hashPassword;
 	let result = '_';
@@ -54,7 +56,7 @@ exports.zhuce = (req, res) =>{
 exports.update = (req, res) =>{
 	let param = req.body;
 	if(param._id){
-		用户.updateOne({_id: param._id}, param, err =>{});
+		User.updateOne({_id: param._id}, param, err =>{});
 	}
 	res.json({
 		status: 200

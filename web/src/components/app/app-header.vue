@@ -112,7 +112,7 @@ export default {
     return {
       searchText: '',
       infoMenu: [
-        // { key: 'info', title: '个人信息', icon: 'h-icon-user' },
+        { key: 'info', title: '个人信息', icon: 'h-icon-user' },
         { key: 'logout', title: '退出登录', icon: 'h-icon-outbox' }
       ],
       user: Utils.getSessionLocal2Json("token-session")
@@ -130,7 +130,6 @@ export default {
   },
   mounted() {
     this.listenResize();
-    console.log(Utils.getSessionLocal2Json("token-session"));
   },
   methods: {
     listenResize() {
@@ -156,7 +155,7 @@ export default {
         Utils.removeCookie('token-cookie')
         this.$router.replace({ name: 'Login' });
       } else {
-        this.$router.push({ name: 'AccountBasic' });
+        this.$router.push({ name: 'Gerenzhongxin' });
       }
     },
     showSettingModal() {

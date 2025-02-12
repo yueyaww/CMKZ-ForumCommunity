@@ -17,8 +17,13 @@ var storage = multer.diskStorage({
 // 创建 multer 对象
 var upload = multer({ storage: storage });
 
-let 用户_Controller =  require('../controller/用户_Controller.js');
-router.post('/user/zhuce', 用户_Controller.zhuce);
-router.post('/user/denglu', 用户_Controller.denglu);
+let userController = require('../controller/userController.js');
+router.post('/user/zhuce', userController.zhuce);
+router.post('/user/denglu', userController.denglu);
+
+let roleController =  require('../controller/roleController.js');
+router.get('/roles',roleController.gets);
+router.post('/role',roleController.post);
+router.delete('/role',roleController.delete);
 
 module.exports = router;

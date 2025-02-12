@@ -2,7 +2,7 @@
 </style>
 <template>
   <div>
-    <Layout class="app-frame" v-if="!loading" :siderCollapsed="siderCollapsed" :siderFixed="layoutConfig.siderFixed">
+    <Layout class="app-frame" :siderCollapsed="siderCollapsed" :siderFixed="layoutConfig.siderFixed">
       <Sider :theme="layoutConfig.siderTheme">
         <appMenu :theme="layoutConfig.siderTheme"></appMenu>
       </Sider>
@@ -13,9 +13,7 @@
         <SysTabs v-if="layoutConfig.showSystab" homePage="Home"></SysTabs>
         <Content>
           <div class="app-frame-content">
-            <!-- <keep-alive> -->
-            <router-view></router-view>
-            <!-- </keep-alive> -->
+           <router-view></router-view>
           </div>
           <HFooter>
             <appFooter></appFooter>
@@ -47,19 +45,16 @@ export default {
         siderTheme: 'white',
         showSystab: false,
         headerFixed: true,
-        siderFixed: true
-      }
+        siderFixed: true,
+      },
+      user: {}
     };
   },
   mounted() {
-    // 如果无后台数据，将此处屏蔽
-    // this.init();
-
-    // 如果无后台数据，将此处打开
-    this.loading = false;
-
+    this.init();
     const listener = G.addlistener('SYS_MENU_REFRESH', () => {
-      this.initMenu();
+      let user = Utils.getSessionLocal2Json("token-session");
+      this.initMenu(user);
     });
     this.$once('hook:beforeDestroy', function () {
       G.removelistener(listener);
@@ -68,24 +63,22 @@ export default {
   methods: {
     init() {
       this.$Loading('加载中');
+      let token = Utils.getCookie('token-cookie');
+      let user = Utils.getSessionLocal2Json("token-session");
+      
+      this.initMenu(user);
+      
+      user.avatar = require('../../images/avatar.png');
+      store.dispatch('updateAccount', user);
+      this.$Loading.close();
+      return user;
+    },
+    initMenu(user) {
+      G.set('SYS_MENUS', user.权限.menus);
+      G.trigger('SYS_MENU_UPDATE');
     },
     updateLayoutConfig({ key, value }) {
       this.layoutConfig[key] = value;
-    },
-    initMenu() {
-      // 如果使用权限配置，配合后端获取请求的数据
-      // R.Account.menus().then(resp => {
-      //   if (resp.ok) {
-      //     this.menus = getMenus(resp.body);
-      //     this.menuSelect();
-      //   }
-      // });
-      let menus = Utils.getLocal2Json('SYS_CONFIG_MENU') || fullMenuKeys;
-      G.set('SYS_MENUS', menus);
-      G.trigger('SYS_MENU_UPDATE');
-      if (!isAuthPage(this.$route.name)) {
-        this.$router.replace({ name: 'PermissionError' });
-      }
     }
   },
   computed: {

@@ -180,7 +180,7 @@
         loginContent: false,
         spaceboi: null,
         登录页: true,
-        captchaText: "", // 生成的验证码文本
+        captchaText: ""
       };
     },
     created() {
@@ -226,7 +226,7 @@
           });
           return;
         }
-        R.用户.注册(this.注册模型).then(resp => {
+        R.User.zhuce(this.注册模型).then(resp => {
           if (resp.ok) {
             this.denglu(resp.body);
           } else {
@@ -245,7 +245,7 @@
           });
           return;
         }
-        R.用户.登录(this.登录模型).then(resp => {
+        R.User.denglu(this.登录模型).then(resp => {
           if (resp.ok) {
             this.denglu(resp.body);
           } else {
@@ -260,6 +260,9 @@
       denglu(user){
         Utils.saveCookie('token-cookie', user._id, null, "/", 60);
         Utils.saveSessionLocal('token-session', user);
+        
+        G.set('SYS_MENUS', user.权限.menus);
+        G.trigger('SYS_MENU_UPDATE');
         
         this.$router.push({
           path: "/"
