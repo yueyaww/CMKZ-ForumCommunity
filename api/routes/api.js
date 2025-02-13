@@ -29,4 +29,13 @@ router.get('/roles',roleController.gets);
 router.post('/role',roleController.post);
 router.delete('/role',roleController.delete);
 
+let shequController =  require('../controller/shequController.js');
+router.get('/shequs',shequController.gets);
+router.post('/shequ',shequController.post);
+
+let huatiController =  require('../controller/huatiController.js');
+router.post('/huati/page',huatiController.page);
+router.get('/huati',huatiController.get);
+router.post('/huati',huatiController.post);
+
 module.exports = router;

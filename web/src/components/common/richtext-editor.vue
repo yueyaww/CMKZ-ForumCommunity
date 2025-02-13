@@ -23,7 +23,7 @@ export default {
     },
     cache: {
       type: Boolean,
-      default: true // 是否开启本地存储
+      default: false // 是否开启本地存储
     }
   },
   data() {

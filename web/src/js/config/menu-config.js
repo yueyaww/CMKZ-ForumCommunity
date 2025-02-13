@@ -5,6 +5,11 @@ const fullMenus = [
     icon: 'icon-monitor'
   },
   {
+    title: '社区',
+    key: 'Shequ',
+    icon: 'icon-layout'
+  },
+  {
     title: '设置',
     key: 'SysSetting',
     icon: 'icon-cog',

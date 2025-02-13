@@ -29,6 +29,14 @@ const Request = {
       return Ajax.delete('/role',param);
     }
   },
+  Shequ:{
+    gets() {
+      return Ajax.get('/shequs');
+    },
+    save(param) {
+      return Ajax.postJson('/shequ', param);
+    }
+  },
 };
 
 export default Request;

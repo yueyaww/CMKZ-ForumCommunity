@@ -6,7 +6,7 @@
           <div class="h-panel-bar">
             <span class="h-panel-title">基本信息</span>
           </div>
-          <div class="h-panel-body" >
+          <div class="h-panel-body"  v-if="height" style="overflow:auto;" :style="'height:'+height+'px;'">
             <Form :model="user" ref="form" :readonly="true">
               <FormItem label="用户名:">
                 {{user.用户名}}
@@ -26,7 +26,7 @@
           <div class="h-panel-bar">
             <span class="h-panel-title">安全设置</span>
           </div>
-          <div class="h-panel-body" style="padding-top: 0%;">
+          <div class="h-panel-body" style="padding-top: 0%; overflow:auto;" v-if="height" :style="'height:'+height+'px;'">
             <div class="security-setting-vue">
               <div class="common-list-container">
                 <div class="common-list-item">
@@ -64,8 +64,12 @@
   export default {
     data() {
       return {
-        user: Utils.getSessionLocal2Json("token-session")
+        user: Utils.getSessionLocal2Json("token-session"),
+        height: 450
       };
+    },
+    created() {
+      this.height = (document.body.clientHeight - 272);
     },
     mounted() {
       this.init();

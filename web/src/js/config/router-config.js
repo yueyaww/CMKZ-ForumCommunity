@@ -75,7 +75,6 @@ const initRouter = () => {
 
   router.beforeEach((to, from, next) => {
     let session = Utils.getSessionLocal2Json('token-session');
-    console.log(!session);
     if (to.matched.some(record => record.meta.auth) && !session) {
       next({
         path: '/login',

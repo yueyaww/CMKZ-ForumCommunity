@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class=" h-panel-body home-part-body">
-            <Menu :datas="users" ref="menuUsers" className="h-menu-white" :option="option"></Menu>
+            <Menu :datas="users" ref="menuUsers" className="h-menu-white" :option="option" @select="triggerSelectUser"></Menu>
           </div>
           <div class="h-panel-bar">
           </div>

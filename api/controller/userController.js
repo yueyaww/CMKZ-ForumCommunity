@@ -66,6 +66,9 @@ exports.update = (req, res) =>{
 exports.gets = (req, res) =>{
 	let param = req.query;
 	let sql = {};
+	if(param.role){
+		sql.push({"role": param.role})
+	}
 	User.find()
 	.where(sql)
 	.populate('权限')
