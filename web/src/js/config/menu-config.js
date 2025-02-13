@@ -13,6 +13,11 @@ const fullMenus = [
         title: '用户',
         key: 'UserManage',
       	icon: 'icon-head'
+      },
+      {
+        title: '个人中心',
+        key: 'Gerenzhongxin',
+      	icon: 'icon-head'
       }
     ]
   }
