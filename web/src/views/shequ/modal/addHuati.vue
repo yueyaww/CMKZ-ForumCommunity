@@ -24,26 +24,32 @@
 <script>
   export default {
     props: {
+      shequId: String
     },
     data() {
       return {
         model: {
           标题: "",
           文本类型: "富文本",
-          文本内容: ' '
+          文本内容: ' ',
+          作者: '',
+          创建时间: new Date(),
+          更新时间: new Date(),
+          社区: this.shequId
         },
         validationRules: {
           required: ['标题']
-        }
+        },
       };
     },
     mounted() {
+      this.model.作者 = Utils.getSessionLocal2Json("token-session").用户名;
     },
     methods: {
       success() {
         let validResult = this.$refs.form.valid();
         if (validResult.result) {
-        	R.Shequ.save(this.model).then(res =>{
+        	R.Huati.save(this.model).then(res =>{
         		if (res.ok) {
         		  this.$Notice({
         		    type: 'success',

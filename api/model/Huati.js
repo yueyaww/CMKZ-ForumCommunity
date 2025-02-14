@@ -5,6 +5,8 @@ let HuatiSchema = mongoose.Schema({
 	社区: {type: Schema.Types.ObjectId, ref: 'Shequ'},
 	标题: String,
 	作者: String,
+	文本类型: String,
+	文本内容: String,
 	话题已结束: Boolean,
 	话题被隐藏: Boolean,
 	话题被置顶: Boolean,

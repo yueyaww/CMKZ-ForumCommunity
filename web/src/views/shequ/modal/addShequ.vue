@@ -7,9 +7,6 @@
         <FormItem label="社区名:" prop="社区名">
           <input type="text" v-model="model.社区名">
         </FormItem>
-        <FormItem label="权限类别:" prop="权限类别">
-          <Select v-model="model.权限类别" :datas="['所有人', '成员']" :deletable="false"></Select>
-        </FormItem>
       </Form>
     </div>
     <!-- h-modal-footer 将自带modal底部样式 -->
@@ -27,8 +24,7 @@
     data() {
       return {
         model: {
-          社区名: "",
-          权限类别: "所有人"
+          社区名: ""
         },
         validationRules: {
           required: ['社区名']

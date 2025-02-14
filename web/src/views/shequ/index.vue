@@ -24,10 +24,12 @@
             </div>
           </div>
           <div class="h-panel-body" v-if="height" style="overflow:auto;" :style="'height:'+height+'px;'">
-            <Table :datas="huatis" ref="table">
+            <Table :datas="huatis" ref="table" @rowSelect="huatiSelect" :selectRow="true">
+              <TableItem title="序号" prop="$serial" :width="50"></TableItem>
               <TableItem title="标题" prop="标题" ></TableItem>
               <TableItem title="作者" prop="作者" :width="100"></TableItem>
-            	<TableItem title="创建日期" prop="创建时间" :width="100" :format="dateFilter"></TableItem>
+            	<TableItem title="创建时间" prop="创建时间" :width="150" :format="dateFilter"></TableItem>
+            	<TableItem title="更新时间" prop="更新时间" :width="150" :format="dateFilter"></TableItem>
             	<div slot="empty">无数据</div>
             </Table>
             <p>
@@ -44,6 +46,7 @@
 <script>
   import ModalAddShequ from "./modal/addShequ.vue";
   import ModalAddHuati from "./modal/addHuati.vue";
+  import ModalViewHuati from "./modal/viewHuati.vue";
   
   export default {
     data() {
@@ -54,7 +57,16 @@
           keyName: '_id'
         },
         shequs: [],
-        shequ: null
+        shequ: null,
+        huatis: [],
+        page: {
+          size: 10,
+          cur: 1,
+          total: 0
+        },
+        searchForm: {
+          社区: ''
+        }
       };
     },
     created() {
@@ -89,11 +101,15 @@
           if (this.shequs.length>0) {
             this.$refs.menuShequ.select(this.shequs[0]._id);
             this.shequ = this.shequs[0];
+            this.searchForm.社区 = this.shequ._id;
+            this.getHuatis();
           }
         });
       },
       triggerSelectShequ(data){
         this.shequ = data;
+        this.searchForm.社区 = data._id;
+        this.getHuatis();
       },
       addHuati(){
         if(this.shequ == null){
@@ -109,15 +125,50 @@
           fullScreen: true,
         	component: {
         		vue: ModalAddHuati,
-            datas: {}
+            datas: {shequId: this.shequ._id}
         	},
+          events: {
+            success: (modal, data) => {
+              this.getHuatis();
+            }
+          }
+        });
+      },
+      getHuatis(){
+      	R.Huati.page({'size': this.page.size,'cur': this.page.cur,searchForm: this.searchForm}).then(res =>{
+      		if(res.ok){
+      			this.huatis = res.body.datas;
+      	    this.page.total = res.body.count
+      		}
+      	});
+      },
+      currentChange(value){
+        R.Huati.page({'size': value.size,'cur': value.cur, searchForm: this.searchForm}).then(res =>{
+        	if(res.ok){
+        		this.huatis = res.body.datas;
+            this.page.total = res.body.count
+        	}
+        });
+      },
+      huatiSelect(data){
+        this.$Modal({
+          hasCloseIcon: true,
+          fullScreen: true,
+        	component: {
+        		vue: ModalViewHuati,
+            datas: {huati: data}
+        	},
+          events: {
+            success: (modal, data) => {
+            }
+          }
         });
       },
       dateFilter(value){
         if(!value){
           return null
         }else{
-          return manba(value).format();
+          return Manba(value).format('k');
         }
       }
     }

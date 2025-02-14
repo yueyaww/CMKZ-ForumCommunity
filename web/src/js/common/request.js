@@ -37,6 +37,14 @@ const Request = {
       return Ajax.postJson('/shequ', param);
     }
   },
+  Huati:{
+    save(param) {
+      return Ajax.postJson('/huati', param);
+    },
+    page(param) {
+      return Ajax.postJson('/huati/page',param);
+    },
+  },
 };
 
 export default Request;

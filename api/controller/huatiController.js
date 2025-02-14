@@ -51,9 +51,9 @@ exports.page = (req,res) =>{
 	let searchForm = param.searchForm;
 	let sql = [{'_id': {$ne: null}}];
 	if(searchForm){
-		// if(searchForm.tissueCode){
-		// 	sql.push({"": searchForm.tissueCode})
-		// }
+		if(searchForm.社区){
+			sql.push({"社区": searchForm.社区})
+		}
 	}
 	Huati.find()
 	.and(sql)
