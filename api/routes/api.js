@@ -38,4 +38,8 @@ router.post('/huati/page',huatiController.page);
 router.get('/huati',huatiController.get);
 router.post('/huati',huatiController.post);
 
+let huatihuifuController =  require('../controller/huatihuifuController.js');
+router.get('/huatihuifus', huatihuifuController.gets);
+router.post('/huatihuifu', huatihuifuController.post);
+
 module.exports = router;

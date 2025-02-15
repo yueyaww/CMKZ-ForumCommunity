@@ -11,7 +11,13 @@ let HuatiSchema = mongoose.Schema({
 	话题被隐藏: Boolean,
 	话题被置顶: Boolean,
 	创建时间: Date,
-	更新时间: Date
+	更新时间: Date,
+	特征: String,
+	标题阅读权限: String,
+	正文阅读权限: String,
+	发言权限: String,
+	公告编辑权限: String,
+	元权限: String
 });
 
 module.exports = mongoose.model('Huati', HuatiSchema);

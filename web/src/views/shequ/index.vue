@@ -6,7 +6,7 @@
           <div class="h-panel-bar">
             <span class="h-panel-title">社区列表</span>
             <div style="float:right" class="h-btn-group">
-              <Button color="green" size="s" @click="addShequ">创建</Button>
+              <Button color="green" @click="addShequ">创建</Button>
             </div>
           </div>
           <div class="h-panel-body" v-if="height" style="overflow:auto;padding-top: 10px;" :style="'height:'+height+'px;'">
@@ -20,7 +20,7 @@
           <div class="h-panel-bar">
             <span class="h-panel-title">话题</span>
             <div style="float:right" class="h-btn-group">
-              <Button color="green" size="s" @click="addHuati">新建</Button>
+              <Button color="green" @click="addHuati">新建</Button>
             </div>
           </div>
           <div class="h-panel-body" v-if="height" style="overflow:auto;" :style="'height:'+height+'px;'">

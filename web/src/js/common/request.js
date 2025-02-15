@@ -8,8 +8,8 @@ const Request = {
     denglu(param) {
       return Ajax.postJson('/user/denglu', param);
     },
-    gets() {
-      return Ajax.get('/users');
+    gets(param) {
+      return Ajax.get('/users', param);
     },
     get(param) {
       return Ajax.get('/user', param);
@@ -43,7 +43,15 @@ const Request = {
     },
     page(param) {
       return Ajax.postJson('/huati/page',param);
+    }
+  },
+  HuatiHuifu:{
+    save(param) {
+      return Ajax.postJson('/huatihuifu', param);
     },
+    gets(param) {
+      return Ajax.get('/huatihuifus', param);
+    }
   },
 };
 

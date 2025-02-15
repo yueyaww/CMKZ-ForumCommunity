@@ -8,7 +8,7 @@
     .markdown-show {
       overflow: auto;
       flex: 1;
-      height: 500px;
+      // height: 500px;
       padding: 10px 20px;
     }
 
