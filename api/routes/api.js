@@ -42,4 +42,7 @@ let huatihuifuController =  require('../controller/huatihuifuController.js');
 router.get('/huatihuifus', huatihuifuController.gets);
 router.post('/huatihuifu', huatihuifuController.post);
 
+let wecharController =  require('../controller/wecharController.js');
+router.get('/wechat/url', wecharController.get);
+
 module.exports = router;

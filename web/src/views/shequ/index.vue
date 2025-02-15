@@ -1,179 +1,144 @@
 <template>
-  <div class="frame-page ">
-    <Row :space="30">
-      <Cell :xs='24' :sm='24' :md='7' :lg='7' :xl='7'>
-        <div class="h-panel">
-          <div class="h-panel-bar">
-            <span class="h-panel-title">社区列表</span>
-            <div style="float:right" class="h-btn-group">
-              <Button color="green" @click="addShequ">创建</Button>
-            </div>
-          </div>
-          <div class="h-panel-body" v-if="height" style="overflow:auto;padding-top: 10px;" :style="'height:'+height+'px;'">
-            <Menu :datas="shequs" ref="menuShequ" className="h-menu-white" 
-            :option="{titleName: '社区名',keyName: '_id'}" @select="triggerSelectShequ"></Menu>
-          </div>
-        </div>
-      </Cell>
-      <Cell :xs='24' :sm='24' :md='17' :lg='17' :xl='17'>
-        <div class="h-panel">
-          <div class="h-panel-bar">
-            <span class="h-panel-title">话题</span>
-            <div style="float:right" class="h-btn-group">
-              <Button color="green" @click="addHuati">新建</Button>
-            </div>
-          </div>
-          <div class="h-panel-body" v-if="height" style="overflow:auto;" :style="'height:'+height+'px;'">
-            <Table :datas="huatis" ref="table" @rowSelect="huatiSelect" :selectRow="true">
-              <TableItem title="序号" prop="$serial" :width="50"></TableItem>
-              <TableItem title="标题" prop="标题" ></TableItem>
-              <TableItem title="作者" prop="作者" :width="100"></TableItem>
-            	<TableItem title="创建时间" prop="创建时间" :width="150" :format="dateFilter"></TableItem>
-            	<TableItem title="更新时间" prop="更新时间" :width="150" :format="dateFilter"></TableItem>
-            	<div slot="empty">无数据</div>
-            </Table>
-            <p>
-              <Pagination v-model="page" align="center" @change="currentChange"></Pagination>
-            </p>
-          </div>
-        </div>
-      </Cell>
-    </Row>
-    
+  <div>
+    <h1>微信支付</h1>
+    <div v-if="loading">加载中...</div>
+    <div v-else>
+      <div v-if="qrCodeUrl">
+        <canvas ref="qrCodeCanvas"></canvas>
+        <p>请使用微信扫描二维码完成支付</p>
+      </div>
+      <div v-else>
+        无法生成支付二维码，请重试。
+      </div>
+      <div v-if="paymentStatus">
+        支付状态: {{ paymentStatus }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  import ModalAddShequ from "./modal/addShequ.vue";
-  import ModalAddHuati from "./modal/addHuati.vue";
-  import ModalViewHuati from "./modal/viewHuati.vue";
-  
-  export default {
-    data() {
-      return {
-        height: 450,
-        option: {
-          titleName: 'name',
-          keyName: '_id'
-        },
-        shequs: [],
-        shequ: null,
-        huatis: [],
-        page: {
-          size: 10,
-          cur: 1,
-          total: 0
-        },
-        searchForm: {
-          社区: ''
-        }
+import axios from 'axios';
+import QRCode from 'qrcode';
+import { parseStringPromise } from 'xml2js';
+
+export default {
+  data() {
+    return {
+      loading: true, // 加载状态
+      qrCodeUrl: '', // 微信支付二维码链接
+      paymentStatus: '', // 支付状态
+      intervalId: null, // 轮询定时器ID
+      orderId: 'ORDER123456', // 订单号（示例）
+      totalFee: 1, // 金额（单位：分，示例）
+      body: '测试商品', // 商品描述（示例）
+    };
+  },
+  async created() {
+    // 组件创建时生成支付链接
+    await this.generateWechatPayLink();
+    // this.loading = false;
+
+    // // 开始轮询支付状态
+    // this.intervalId = setInterval(this.checkPaymentStatus, 3000);
+  },
+  methods: {
+    // 生成随机字符串
+    generateNonceStr() {
+      return Math.random().toString(36).substr(2, 15);
+    },
+
+    // 生成签名
+    generateSign(params, key) {
+      const stringA = Object.keys(params)
+        .sort()
+        .map((k) => `${k}=${params[k]}`)
+        .join('&');
+      const stringSignTemp = `${stringA}&key=${key}`;
+      return require('crypto').createHash('md5').update(stringSignTemp).digest('hex').toUpperCase();
+    },
+
+    // 生成微信支付链接
+    async generateWechatPayLink() {
+      const params = {
+        appid: 'wxe724093c14513196', 
+        mch_id: '1700361677', 
+        nonce_str: this.generateNonceStr(),
+        body: this.body,
+        out_trade_no: this.orderId,
+        total_fee: this.totalFee,
+        spbill_create_ip: '127.0.0.1',
+        notify_url: 'http://yuntuanai.top/notify',
+        trade_type: 'NATIVE',
       };
-    },
-    created() {
-      this.height = (document.body.clientHeight - 272);
-    },
-    mounted() {
-      this.getShequs();
-    },
-    methods: {
-      addShequ(){
-        this.$Modal({
-          middle: true,
-          hasDivider: true,
-          closeOnMask: false,
-          component: {
-            vue: ModalAddShequ,
-            datas: {}
-          },
-          events: {
-            success: (modal, data) => {
-              this.getShequs();
-            }
-          }
+
+      // 生成签名
+      params.sign = this.generateSign(params, '45854273260358674283855867428385'); //商户密钥
+
+      // 将参数转换为XML格式
+      const builder = new (require('xml2js').Builder)({ rootName: 'xml', headless: true });
+      const xml = builder.buildObject(params);
+
+      try {
+        // 调用微信支付统一下单API
+        const response = await axios.post('https://api.mch.weixin.qq.com/pay/unifiedorder', xml, {
+          headers: { 'Content-Type': 'text/xml' },
         });
-      },
-      getShequs() {
-        R.Shequ.gets().then(resp => {
-          if (resp.ok) {
-            this.shequs = resp.body;
-          }
-        }).then(() =>{
-          if (this.shequs.length>0) {
-            this.$refs.menuShequ.select(this.shequs[0]._id);
-            this.shequ = this.shequs[0];
-            this.searchForm.社区 = this.shequ._id;
-            this.getHuatis();
-          }
-        });
-      },
-      triggerSelectShequ(data){
-        this.shequ = data;
-        this.searchForm.社区 = data._id;
-        this.getHuatis();
-      },
-      addHuati(){
-        if(this.shequ == null){
-          this.$Notice({
-            type: 'error',
-            title: "失败",
-            content: '请选择社区'
-          });
-          return;
+
+        // 解析XML响应
+        const result = await parseStringPromise(response.data, { explicitArray: false });
+
+        if (result.xml.return_code === 'SUCCESS' && result.xml.result_code === 'SUCCESS') {
+          this.qrCodeUrl = result.xml.code_url; // 获取支付二维码链接
+          this.generateQRCode(); // 生成二维码
+        } else {
+          throw new Error(result.xml.return_msg || '生成支付链接失败');
         }
-        this.$Modal({
-          hasCloseIcon: true,
-          fullScreen: true,
-        	component: {
-        		vue: ModalAddHuati,
-            datas: {shequId: this.shequ._id}
-        	},
-          events: {
-            success: (modal, data) => {
-              this.getHuatis();
-            }
-          }
-        });
-      },
-      getHuatis(){
-      	R.Huati.page({'size': this.page.size,'cur': this.page.cur,searchForm: this.searchForm}).then(res =>{
-      		if(res.ok){
-      			this.huatis = res.body.datas;
-      	    this.page.total = res.body.count
-      		}
-      	});
-      },
-      currentChange(value){
-        R.Huati.page({'size': value.size,'cur': value.cur, searchForm: this.searchForm}).then(res =>{
-        	if(res.ok){
-        		this.huatis = res.body.datas;
-            this.page.total = res.body.count
-        	}
-        });
-      },
-      huatiSelect(data){
-        this.$Modal({
-          hasCloseIcon: true,
-          fullScreen: true,
-        	component: {
-        		vue: ModalViewHuati,
-            datas: {huati: data}
-        	},
-          events: {
-            success: (modal, data) => {
-            }
-          }
-        });
-      },
-      dateFilter(value){
-        if(!value){
-          return null
-        }else{
-          return Manba(value).format('k');
-        }
+      } catch (error) {
+        console.error('生成微信支付链接失败:', error.message);
+        this.qrCodeUrl = '';
       }
-    }
-  }
+    },
+
+    // 生成二维码
+    generateQRCode() {
+      if (this.qrCodeUrl && this.$refs.qrCodeCanvas) {
+        QRCode.toCanvas(this.$refs.qrCodeCanvas, this.qrCodeUrl, (error) => {
+          if (error) console.error('生成二维码失败:', error);
+        });
+      }
+    },
+
+    // 检查支付状态
+    async checkPaymentStatus() {
+      try {
+        const response = await axios.get('/api/wechat-pay/status', {
+          params: { orderId: this.orderId },
+        });
+        if (response.data.status === 'SUCCESS') {
+          this.paymentStatus = '支付成功';
+          clearInterval(this.intervalId); // 停止轮询
+        } else if (response.data.status === 'FAIL') {
+          this.paymentStatus = '支付失败';
+          clearInterval(this.intervalId); // 停止轮询
+        }
+      } catch (error) {
+        console.error('检查支付状态失败:', error.message);
+      }
+    },
+  },
+  beforeDestroy() {
+    // 组件销毁时清除定时器
+    clearInterval(this.intervalId);
+  },
+};
 </script>
 
-<style>
+<style scoped>
+canvas {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #ccc;
+  margin: 20px 0;
+}
 </style>
