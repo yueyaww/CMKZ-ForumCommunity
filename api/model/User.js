@@ -7,7 +7,10 @@ let UserSchema = mongoose.Schema({
 	手机号: String,
 	密码盐: String,
 	密码哈希: String,
-	余额: Number,
+	余额: {
+		type: Number,
+		default: 0
+	},
 	创建时间: Date,
 	权限: {type: Schema.Types.ObjectId, ref: 'Role'}
 });

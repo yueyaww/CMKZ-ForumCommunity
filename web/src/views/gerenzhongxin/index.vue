@@ -17,6 +17,9 @@
               <FormItem label="邮箱:">
                 {{user.邮箱}}
               </FormItem>
+              <FormItem label="余额:">
+                {{user.余额}}点<Button style="float: right;" @click="chongzhi()">充值</Button>
+              </FormItem>
             </Form>
           </div>
         </div>
@@ -61,6 +64,7 @@
 </template>
 
 <script>
+  import ModalChongzhi from "./modal/chongzhi.vue";
   export default {
     data() {
       return {
@@ -72,11 +76,23 @@
       this.height = (document.body.clientHeight - 272);
     },
     mounted() {
-      this.init();
     },
     methods: {
-      init() {
-  
+      chongzhi() {
+        this.$Modal({
+          middle: true,
+          hasDivider: true,
+          closeOnMask: false,
+          component: {
+            vue: ModalChongzhi,
+            datas: {}
+          },
+          events: {
+            success: (modal, data) => {
+              this.user.余额 = data.余额;
+            }
+          }
+        });
       }
     },
     computed: {

@@ -53,6 +53,14 @@ const Request = {
       return Ajax.get('/huatihuifus', param);
     }
   },
+  WeChat:{
+    get(param) {
+      return Ajax.get('/wechat/url', param);
+    },
+    queryOrder(param) {
+      return Ajax.get('/wechat/queryOrder', param);
+    }
+  },
 };
 
 export default Request;
