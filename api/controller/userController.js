@@ -7,9 +7,9 @@ exports.denglu = (req,res) =>{
 	  $or: [
 	    { '手机号': param.账号 },
 	    { '用户名': param.账号 }
-	  ]
+	  ] 
 	})
-	.populate('权限')
+	.populate('角色')
 	.then(doc => {
 		if(doc){
 			let hashPassword = crypto
@@ -46,6 +46,7 @@ exports.zhuce = (req, res) =>{
 			result += Math.floor(Math.random() * 10);
 	}
 	user.用户名 = "CMKZ_EY"+result;
+	user.角色 = '67ac5c803e4ed447c98fa652';
 	user.save();
 	res.json({
 		status: 200,
@@ -71,7 +72,7 @@ exports.gets = (req, res) =>{
 	}
 	User.find()
 	.where(sql)
-	.populate('权限')
+	.populate('角色')
 	.exec((err,docs) =>{
 		if(!err){
 			res.json({
@@ -87,7 +88,7 @@ exports.gets = (req, res) =>{
 exports.get = (req,res) =>{
 	User.findOne()
 	.where({'_id': req.query.id})
-	.populate('权限')
+	.populate('角色')
 	.exec((err,doc) =>{
 		if(!err){
 			res.json({

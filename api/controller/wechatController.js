@@ -2,6 +2,7 @@ const axios = require('axios');
 const crypto = require('crypto');
 const fs = require('fs');
 const forge = require('node-forge');
+const path = require('path');
 
 const config = {
   mchid: '1700361677', // 替换为你的商户号

@@ -26,7 +26,7 @@
     data() {
       return {
         model: {
-          权限: '',
+          角色: '',
           _id: ''
         },
         validationRules: {
@@ -36,7 +36,7 @@
     },
     mounted() {
       if(this.data){
-        this.model.权限 = this.data.权限._id;
+        this.model.角色 = this.data.角色._id;
         this.model._id = this.data._id;
       }
     },

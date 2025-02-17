@@ -12,7 +12,10 @@ let UserSchema = mongoose.Schema({
 		default: 0
 	},
 	创建时间: Date,
-	权限: {type: Schema.Types.ObjectId, ref: 'Role'}
+	角色: {
+		type: Schema.Types.ObjectId,
+		ref: 'Role'
+	}
 });
 
 module.exports = mongoose.model('User', UserSchema);

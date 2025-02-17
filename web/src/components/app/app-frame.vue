@@ -74,7 +74,7 @@ export default {
       return user;
     },
     initMenu(user) {
-      G.set('SYS_MENUS', user.权限.menus);
+      G.set('SYS_MENUS', user.角色.menus);
       G.trigger('SYS_MENU_UPDATE');
     },
     updateLayoutConfig({ key, value }) {

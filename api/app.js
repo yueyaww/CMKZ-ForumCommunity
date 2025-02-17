@@ -8,9 +8,12 @@ const NodeCache = require( "node-cache" );
 const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
 var apiRouter = require('./routes/api');
 
 const config = require('./config.json');
+
+// const dbBackupController =  require('./controller/dbBackupController.js');
 
 const myCache = new NodeCache();
 global.myCache = myCache;
@@ -24,6 +27,9 @@ db.once('open', function() {
   console.log(config.dbName+ ' mongoDB已连接 '+ config.ctx);
 });
 
+//启动备份
+// dbBackupController.doBackup();
+ 
 var app = express();
 
 // view engine setup
@@ -41,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(config.ctx+"/upload",express.static(path.join(__dirname, 'upload')));
 
 app.use('/', indexRouter);
+app.use('/users', usersRouter);
 app.use(config.ctx, apiRouter);
 
 // catch 404 and forward to error handler
@@ -50,6 +57,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 

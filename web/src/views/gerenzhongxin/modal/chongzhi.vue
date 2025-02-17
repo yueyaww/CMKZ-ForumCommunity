@@ -81,17 +81,18 @@
           console.log(res.data);
           if(res.data.trade_state_desc == '支付成功'){
             clearInterval(this.intervalId);
-            let user = {
+            R.User.update({
               _id: Utils.getSessionLocal2Json("token-session")._id,
               余额: this.dianshu
-            };
-            R.User.update(user).then(res =>{
+            }).then(res =>{
             	if (res.ok) {
             	  this.$Notice({
             	    type: 'success',
             	    title: "成功",
             	    content: "充值"
             	  });
+                Utils.getSessionLocal2Json("token-session").余额 = this.dianshu;
+                Utils.saveSessionLocal('token-session', Utils.getSessionLocal2Json("token-session"));
             	  this.$emit('success', user);
             	  this.close();
             	} else {

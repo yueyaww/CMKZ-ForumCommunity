@@ -9,7 +9,16 @@
           <div class="h-panel-body"  v-if="height" style="overflow:auto;" :style="'height:'+height+'px;'">
             <Form :model="user" ref="form" :readonly="true">
               <FormItem label="用户名:">
-                {{user.用户名}}
+                <template v-if="xiugai_yhm_flag">
+                  <div class="h-input-group">
+                    <input type="text" v-model="user.用户名">
+                    <Button style="float: right;" @click="xiugai_yhm_qr()">确认</Button>
+                  </div>
+                </template>
+                <template v-if="!xiugai_yhm_flag">
+                  {{user.用户名}}
+                </template>
+                <Button v-if="user.用户名.indexOf('CMKZ_EY')!=-1&&!xiugai_yhm_flag" style="float: right;" @click="xiugai_yhm_flag=true">修改</Button>
               </FormItem>
               <FormItem label="手机号:">
                 {{user.手机号}}
@@ -69,13 +78,15 @@
     data() {
       return {
         user: Utils.getSessionLocal2Json("token-session"),
-        height: 450
+        height: 450,
+        xiugai_yhm_flag: false
       };
     },
     created() {
       this.height = (document.body.clientHeight - 272);
     },
     mounted() {
+      
     },
     methods: {
       chongzhi() {
@@ -92,6 +103,28 @@
               this.user.余额 = data.余额;
             }
           }
+        });
+      },
+      xiugai_yhm_qr(){
+        R.User.update({
+          _id: Utils.getSessionLocal2Json("token-session")._id,
+          用户名: this.user.用户名
+        }).then(res =>{
+        	if (res.ok) {
+        	  this.$Notice({
+        	    type: 'success',
+        	    title: "成功",
+        	    content: ""
+        	  });
+            Utils.saveSessionLocal('token-session', this.user);
+            this.xiugai_yhm_flag = false;
+        	} else {
+        	  this.$Notice({
+        	    type: 'error',
+        	    title: "失败",
+        	    content: res.msg
+        	  });
+        	}
         });
       }
     },
