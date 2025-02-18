@@ -5,7 +5,7 @@
     <div style="padding:15px">
       <Form ref="form" :rules="validationRules" :model="model">
         <FormItem label="角色" prop="role">
-          <Select v-model="model.权限" :datas="roles" keyName="_id" titleName="name" :deletable="false"></Select>
+          <Select v-model="model.角色" :datas="roles" keyName="_id" titleName="name" :deletable="false"></Select>
         </FormItem>
       </Form>
     </div>

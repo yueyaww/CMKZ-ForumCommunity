@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@alicloud/sms-sdk": "^1.1.6",
     "axios": "^0.27.2",
     "child_process": "^1.0.2",
     "cookie-parser": "~1.4.4",

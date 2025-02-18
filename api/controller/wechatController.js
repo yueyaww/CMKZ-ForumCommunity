@@ -9,8 +9,8 @@ const config = {
   appid: 'wxe724093c14513196', // 替换为你的appid
   apiV3Key: '45854273260358674283855867428385', // 替换为你的APIv3密钥
   serialNo: '6D1FF0D3CAEEC170E8CD4A96A3CDC110507ED021', // 替换为你的证书序列号
-  privateKey: fs.readFileSync('./key.pem'), // 替换为你的私钥文件路径
-}; 
+  privateKey: fs.readFileSync(path.join(__dirname, 'key.pem')), // 替换为你的私钥文件路径
+};
 
 function generateSignature(method, url, body, timestamp, nonce) {
   const message = `${method}\n${url}\n${timestamp}\n${nonce}\n${body}\n`;

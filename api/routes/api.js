@@ -46,4 +46,7 @@ let wechatController =  require('../controller/wechatController.js');
 router.get('/wechat/url', wechatController.get);
 router.get('/wechat/queryOrder', wechatController.queryOrder);
 
+let alicloudController =  require('../controller/alicloudController.js');
+router.get('/alicloud/sendSMS', alicloudController.sendSMS);
+
 module.exports = router;

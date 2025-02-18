@@ -61,6 +61,11 @@ const Request = {
       return Ajax.get('/wechat/queryOrder', param);
     }
   },
+  Alicloud:{
+    sendSMS(param) {
+      return Ajax.get('/alicloud/sendSMS', param);
+    }
+  }
 };
 
 export default Request;

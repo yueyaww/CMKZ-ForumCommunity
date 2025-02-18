@@ -24,6 +24,7 @@
   }
 
   .login-title .app-logo-icon {
+    background: url(../../images/logo.png);
     margin-right: 10px;
     background-size: contain;
     height: 60px;
@@ -95,8 +96,7 @@
       </div>
       <div class="login-content">
         <div class="login-title">
-            <span class="app-logo-icon"
-            :style="{backgroundImage:'url('+imgUrl+'static/images/src/images/logo.png)'}"></span>
+            <span class="app-logo-icon"></span>
             论坛社区
         </div>
         <div v-show="登录页">
@@ -133,7 +133,10 @@
             </div>
             <div class="h-input-group" v-width="228">
               <input type="text" v-model="注册模型.验证码" placeholder="输入验证码"/>
-              <Button>获取</Button>
+              <Button @click="sendSms()">
+                <template v-if="!isCounting">获取</template>
+                <template v-if="isCounting">{{countdown}}</template>
+              </Button>
             </div>
             <div class="h-input h-input-prefix-icon">
               <input type="password" v-model="注册模型.密码" placeholder="输入密码" />
@@ -157,12 +160,13 @@
   import Thpace from "@/js/plug-in/thpace.js";
   import delaunator from "@/js/plug-in/delaunator.min.js";
   import lottiePlayer from "@lottiefiles/lottie-player";
+  
   export default {
     components: {
       "lottie-player": lottiePlayer
     },
     data() {
-      return {
+      return { 
         innerHeight: window.innerHeight,
         登录模型: {
           账号: '',
@@ -171,7 +175,7 @@
         },
         注册模型: {
           手机号: '',
-          验证码: '0389',
+          验证码: '',
           密码: ''
         },
         ctx: G.get('ctx'),
@@ -180,7 +184,10 @@
         loginContent: false,
         spaceboi: null,
         登录页: true,
-        captchaText: ""
+        captchaText: "",
+        验证码: '',
+        countdown: 1,
+        isCounting: false
       };
     },
     created() {
@@ -190,7 +197,7 @@
       // 生成验证码图片的 URL
       captchaImage() {
         return this.generateCaptchaImage(this.captchaText);
-      },
+      }
     },
     mounted() {
       this.spaceboi = new Thpace(this.$refs.canvas, delaunator);
@@ -201,8 +208,67 @@
       });
       // 初始化时生成验证码
       this.refreshCaptcha();
+      
+      this.验证码 = (Math.floor(Math.random() * 9000) + 1000).toString();
     },
     methods: {
+      sendSms() {
+        const phoneRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
+        if (!phoneRegex.test(this.注册模型.手机号)) {
+          this.$Message({
+            type: "error",
+            text: `请输入正确的手机号`
+          });
+          return;
+        }
+        
+        if (this.isCounting) return;
+        this.isCounting = true;
+        this.countdown = 60;
+        const interval = setInterval(() => {
+          if (this.countdown <= 1) {
+            clearInterval(interval);
+            this.isCounting = false;
+            this.countdown = 1;
+          } else {
+            this.countdown -= 1;
+          }
+        }, 1000);
+        
+        R.Alicloud.sendSMS({
+          '手机号': this.注册模型.手机号,
+          '验证码': this.验证码
+        }).then(resp => {
+          if (resp.ok) {
+            this.$Notice({
+              type: 'success',
+              title: "成功",
+              content: "发送"
+            });
+          } else {
+            this.$Message({
+              type: "error",
+              text: `发送失败，稍后再试。`
+            });
+          }
+        });
+      },
+      startCountdown() {
+        if (this.isCounting) return;
+        
+        this.isCounting = true;
+        this.countdown = 60;
+        
+        const interval = setInterval(() => {
+          if (this.countdown <= 0) {
+            clearInterval(interval);
+            this.isCounting = false;
+            this.countdown = 0;
+          } else {
+            this.countdown -= 1;
+          }
+        }, 1000);
+      },
       zhuce_anniu(){
         const phoneRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
         if (!phoneRegex.test(this.注册模型.手机号)) {
@@ -219,7 +285,7 @@
           });
           return;
         }
-        if(!this.注册模型.验证码){
+        if(!this.注册模型.验证码 || this.注册模型.验证码!= this.验证码){
           this.$Message({
             type: "error",
             text: `验证码不正确`
@@ -228,7 +294,11 @@
         }
         R.User.zhuce(this.注册模型).then(resp => {
           if (resp.ok) {
-            this.denglu(resp.body);
+            R.User.get({id: resp.body._id}).then(resp => {
+              if (resp.ok) {
+                this.denglu(resp.body);
+              }
+            });
           } else {
             this.$Message({
               type: "error",
@@ -254,14 +324,13 @@
               text: `用户名或密码不正确`
             });
           }
-          this.loading = false;
         });
       },
       denglu(user){
         Utils.saveCookie('token-cookie', user._id, null, "/", 60);
         Utils.saveSessionLocal('token-session', user);
         
-        G.set('SYS_MENUS', user.权限.menus);
+        G.set('SYS_MENUS', user.角色.menus);
         G.trigger('SYS_MENU_UPDATE');
         
         this.$router.push({
