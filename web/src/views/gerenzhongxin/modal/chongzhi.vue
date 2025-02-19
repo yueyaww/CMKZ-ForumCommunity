@@ -4,12 +4,23 @@
     <header class="h-modal-header">充值</header>
     <div style="padding:15px">
       <template v-if="!qrCodeUrl">
-        <Radio v-model="dianshuType" :datas="['1点', '10点', '自定义']"></Radio>
-        <input type="number" v-model="dianshu" v-if="dianshuType == '自定义'"/>
+        <div><Radio value='1点' v-model="dianshuType" @change="change_dianshuType">1点</Radio></div>
+        <div><Radio value='10点' v-model="dianshuType" @change="change_dianshuType">10点</Radio></div>
+        <div>
+          <Radio value='自定义' v-model="dianshuType" @change="change_dianshuType">自定义</Radio>
+          <input type="number" @change="change_zidingyi" v-model="dianshu" v-if="dianshuType == '自定义'"/>
+        </div>
+        
+        <div class="h-input-group" style="padding-top: 10px;" v-width="200">
+          <input type="text" v-model="jine" readonly/>
+          <span class="h-input-addon">元</span>
+        </div>
+        
       </template>
       <div v-show="qrCodeUrl" style="text-align: center;">
         <h2>微信扫码支付</h2>
         <canvas ref="qrCodeCanvas" ></canvas>
+        <h2>{{jine / 100}}元</h2>
       </div>
     </div>
     <!-- h-modal-footer 将自带modal底部样式 -->
@@ -30,7 +41,7 @@
       return {
         dianshuType: '1点',
         dianshu: '',
-        jine: 0,
+        jine: 2000,
         qrCodeUrl: null,
         out_trade_no: ''
       };
@@ -39,22 +50,28 @@
       this.qrCodeUrl = null;
     },
     methods: {
-      success() {
+      change_zidingyi(){
+        this.jine = this.dianshu * 2000;
+      },
+      change_dianshuType(){
         switch (this.dianshuType){
           case '1点':
-            this.jine = 2000* 100;
+            this.jine = 2000;
             this.dianshu = 1;
             break;
           case '10点':
-            this.jine = 2000* 100* 10;
+            this.jine = 2000* 10;
             this.dianshu = 10;
             break;
           case '自定义':
-            this.jine = 2000* 100* this.dianshu;
+            this.jine = 2000* this.dianshu;
             break;
           default:
             break;
         }
+      },
+      success() {
+        this.jine = this.jine*100;
         
         this.qrCodeUrl = "weixin://wxpay/bizpayurl?pr=58byl2Fz3";
         this.generateQRCode();

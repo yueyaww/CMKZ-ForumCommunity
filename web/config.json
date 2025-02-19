@@ -1,5 +1,5 @@
 {
-	"startType": "prod",
+	"startType": "dev",
 	"dev": {
 		"appName": "cmkz-fc-web",
 		"ctx": "/cmkz-fc-api",
