@@ -66,12 +66,12 @@ exports.update = (req, res) =>{
 
 exports.gets = (req, res) =>{
 	let param = req.query;
-	let sql = {};
-	if(param.role){
-		sql.push({"role": param.role})
-	}
+	let sql = [];
+	// if(param.role){
+	// 	sql.push({"role": param.role})
+	// }
 	User.find()
-	.where(sql)
+	// .and(sql)
 	.populate('角色')
 	.exec((err,docs) =>{
 		if(!err){
@@ -86,8 +86,16 @@ exports.gets = (req, res) =>{
 };
 
 exports.get = (req,res) =>{
+	let param = req.query;
+	let sql = [];
+	if(param.id){
+		sql.push({"_id": param.id})
+	}
+	if(param.用户名){
+		sql.push({"用户名": param.用户名})
+	}
 	User.findOne()
-	.where({'_id': req.query.id})
+	.and(sql)
 	.populate('角色')
 	.exec((err,doc) =>{
 		if(!err){

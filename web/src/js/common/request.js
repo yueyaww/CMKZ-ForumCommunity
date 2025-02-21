@@ -65,6 +65,17 @@ const Request = {
     sendSMS(param) {
       return Ajax.get('/alicloud/sendSMS', param);
     }
+  },
+  UserGroup:{
+    get(param) {
+      return Ajax.get('/userGroup', param);
+    },
+    gets() {
+      return Ajax.get('/userGroups');
+    },
+    save(param) {
+      return Ajax.postJson('/userGroup', param);
+    }
   }
 };
 

@@ -8,4 +8,9 @@ export default [{
   name: 'Shequ',
   component: (resolve) => require(['views/shequ/index'], resolve),
   meta: { title: '社区', icon: 'icon-layout', auth: true }
+},{
+  path: '/userGroup',
+  name: 'UserGroup',
+  component: (resolve) => require(['views/usergroup/index'], resolve),
+  meta: { title: '社区', icon: 'icon-head', auth: true }
 }];

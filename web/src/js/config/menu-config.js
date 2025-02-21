@@ -20,6 +20,11 @@ const fullMenus = [
       	icon: 'icon-head'
       },
       {
+        title: '用户组',
+        key: 'UserGroup',
+      	icon: 'icon-head'
+      },
+      {
         title: '个人中心',
         key: 'Gerenzhongxin',
       	icon: 'icon-head'

@@ -49,4 +49,9 @@ router.get('/wechat/queryOrder', wechatController.queryOrder);
 let alicloudController =  require('../controller/alicloudController.js');
 router.get('/alicloud/sendSMS', alicloudController.sendSMS);
 
+let userGroupController =  require('../controller/userGroupController.js');
+router.get('/userGroups', userGroupController.gets);
+router.get('/userGroup', userGroupController.gets);
+router.post('/userGroup', userGroupController.post);
+
 module.exports = router;

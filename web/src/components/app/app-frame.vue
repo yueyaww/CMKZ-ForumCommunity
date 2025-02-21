@@ -53,8 +53,13 @@ export default {
   mounted() {
     this.init();
     const listener = G.addlistener('SYS_MENU_REFRESH', () => {
-      let user = Utils.getSessionLocal2Json("token-session");
-      this.initMenu(user);
+      R.User.get({id:Utils.getSessionLocal2Json("token-session")._id}).then(resp => {
+        if (resp.ok) {
+          let user = resp.body;
+          this.initMenu(user);
+          Utils.saveSessionLocal('token-session', user);
+        }
+      });
     });
     this.$once('hook:beforeDestroy', function () {
       G.removelistener(listener);
