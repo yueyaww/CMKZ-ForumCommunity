@@ -105,8 +105,11 @@
           if (resp.ok) {
             this.users = [];
             for (let user of resp.body) {
-              user.name = `[${user.角色.name}] ${user.用户名}`;
-              this.users.push();
+              user.name = '';
+              for (let item of user.角色) {
+                user.name+= `[${item.name}]`
+              }
+              user.name += ` ${user.用户名}`;
             }
             this.users = resp.body;
           }

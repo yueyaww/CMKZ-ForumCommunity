@@ -330,9 +330,6 @@
         Utils.saveCookie('token-cookie', user._id, null, "/", 60);
         Utils.saveSessionLocal('token-session', user);
         
-        G.set('SYS_MENUS', user.角色.menus);
-        G.trigger('SYS_MENU_UPDATE');
-        
         this.$router.push({
           path: "/"
         });

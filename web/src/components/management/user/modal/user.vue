@@ -5,7 +5,7 @@
     <div style="padding:15px">
       <Form ref="form" :rules="validationRules" :model="model">
         <FormItem label="角色" prop="role">
-          <Select v-model="model.角色" :datas="roles" keyName="_id" titleName="name" :deletable="false"></Select>
+          <Select v-model="model.角色" :multiple="true" :datas="roles" keyName="_id" titleName="name" :deletable="false"></Select>
         </FormItem>
       </Form>
     </div>
@@ -26,7 +26,7 @@
     data() {
       return {
         model: {
-          角色: '',
+          角色: [],
           _id: ''
         },
         validationRules: {
@@ -36,7 +36,9 @@
     },
     mounted() {
       if(this.data){
-        this.model.角色 = this.data.角色._id;
+        for (let item of this.data.角色) {
+          this.model.角色.push(item._id);
+        }
         this.model._id = this.data._id;
       }
     },

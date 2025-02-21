@@ -74,7 +74,13 @@ export default {
       return user;
     },
     initMenu(user) {
-      G.set('SYS_MENUS', user.角色.menus);
+      
+      let menus = [];
+      for (let 角色 of user.角色) {
+        menus.push(...角色.menus);
+      }
+      
+      G.set('SYS_MENUS', menus);
       G.trigger('SYS_MENU_UPDATE');
     },
     updateLayoutConfig({ key, value }) {
