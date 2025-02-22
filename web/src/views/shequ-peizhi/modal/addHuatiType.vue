@@ -16,32 +16,55 @@
             <Select v-model="model.标题阅读权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.标题阅读权限)"></Select>
             <Button v-if="model.标题阅读权限.用户组 == '自定义'" @click="changeQuanxian(model.标题阅读权限)"><i class="h-icon-edit"></i></Button>
           </div>
-          
         </FormItem>
         <FormItem label="正文阅读权限:" prop="正文阅读权限">
-          <Select v-model="model.正文阅读权限.用户组" :datas="用户组" :deletable="false"></Select>
+          <div class="h-input-group">
+            <Select v-model="model.正文阅读权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.正文阅读权限)"></Select>
+            <Button v-if="model.正文阅读权限.用户组 == '自定义'" @click="changeQuanxian(model.正文阅读权限)"><i class="h-icon-edit"></i></Button>
+          </div>
         </FormItem>
         <FormItem label="公告编辑权限:" prop="公告编辑权限">
-          <Select v-model="model.公告编辑权限.用户组" :datas="用户组" :deletable="false"></Select>
+          <div class="h-input-group">
+            <Select v-model="model.公告编辑权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.公告编辑权限)"></Select>
+            <Button v-if="model.公告编辑权限.用户组 == '自定义'" @click="changeQuanxian(model.公告编辑权限)"><i class="h-icon-edit"></i></Button>
+          </div>
         </FormItem>
         <FormItem label="元权限:" prop="元权限">
-          <Select v-model="model.元权限.用户组" :datas="用户组" :deletable="false"></Select>
+          <div class="h-input-group">
+            <Select v-model="model.元权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.元权限)"></Select>
+            <Button v-if="model.元权限.用户组 == '自定义'" @click="changeQuanxian(model.元权限)"><i class="h-icon-edit"></i></Button>
+          </div>
         </FormItem>
         
         <FormItem label="结束后标题阅读权限:" prop="结束后标题阅读权限">
-          <Select v-model="model.结束后标题阅读权限.用户组" :datas="用户组" :deletable="false"></Select>
+          <div class="h-input-group">
+            <Select v-model="model.结束后标题阅读权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.结束后标题阅读权限)"></Select>
+            <Button v-if="model.结束后标题阅读权限.用户组 == '自定义'" @click="changeQuanxian(model.结束后标题阅读权限)"><i class="h-icon-edit"></i></Button>
+          </div>
         </FormItem>
         <FormItem label="结束后正文阅读权限:" prop="结束后正文阅读权限">
-          <Select v-model="model.结束后正文阅读权限.用户组" :datas="用户组" :deletable="false"></Select>
+          <div class="h-input-group">
+            <Select v-model="model.结束后正文阅读权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.结束后正文阅读权限)"></Select>
+            <Button v-if="model.结束后正文阅读权限.用户组 == '自定义'" @click="changeQuanxian(model.结束后正文阅读权限)"><i class="h-icon-edit"></i></Button>
+          </div>
         </FormItem>
         <FormItem label="结束后公告编辑权限:" prop="结束后公告编辑权限">
-          <Select v-model="model.结束后公告编辑权限.用户组" :datas="用户组" :deletable="false"></Select>
+          <div class="h-input-group">
+            <Select v-model="model.结束后公告编辑权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.结束后公告编辑权限)"></Select>
+            <Button v-if="model.结束后公告编辑权限.用户组 == '自定义'" @click="changeQuanxian(model.结束后公告编辑权限)"><i class="h-icon-edit"></i></Button>
+          </div>
         </FormItem>
         <FormItem label="结束后发言权限:" prop="结束后发言权限">
-          <Select v-model="model.结束后发言权限.用户组" :datas="用户组" :deletable="false"></Select>
+          <div class="h-input-group">
+            <Select v-model="model.结束后发言权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.结束后发言权限)"></Select>
+            <Button v-if="model.结束后发言权限.用户组 == '自定义'" @click="changeQuanxian(model.结束后发言权限)"><i class="h-icon-edit"></i></Button>
+          </div>
         </FormItem>
         <FormItem label="结束后元权限:" prop="结束后元权限">
-          <Select v-model="model.结束后元权限.用户组" :datas="用户组" :deletable="false"></Select>
+          <div class="h-input-group">
+            <Select v-model="model.结束后元权限.用户组" :datas="用户组" :deletable="false" @change="changeQuanxian(model.结束后元权限)"></Select>
+            <Button v-if="model.结束后元权限.用户组 == '自定义'" @click="changeQuanxian(model.结束后元权限)"><i class="h-icon-edit"></i></Button>
+          </div>
         </FormItem>
       </Form>
     </div>

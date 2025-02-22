@@ -18,7 +18,7 @@
       <Cell :xs='24' :sm='24' :md='17' :lg='17' :xl='17'>
         <div class="h-panel">
           <div class="h-panel-bar">
-            <span class="h-panel-title">预定义话题</span>
+            <span class="h-panel-title">话题类型预定义</span>
             <div style="float:right" class="h-btn-group">
               <Button color="green" @click="addHuatiType">新建</Button>
             </div>

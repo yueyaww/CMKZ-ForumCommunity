@@ -63,7 +63,7 @@ exports.page = (req,res) =>{
 		.and(sql)
 		.limit(size)
 		.skip((cur-1) * size)
-		.sort({'更新时间': 1})
+		.sort({'更新时间': -1})
 		.exec((err ,docs) =>{
 			res.json({
 				status: 200,
