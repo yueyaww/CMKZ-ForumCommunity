@@ -76,6 +76,20 @@ const Request = {
     save(param) {
       return Ajax.postJson('/userGroup', param);
     }
+  },
+  HuatiType:{
+    get(param) {
+      return Ajax.get('/huatiType', param);
+    },
+    gets(param) {
+      return Ajax.get('/huatiTypes', param);
+    },
+    save(param) {
+      return Ajax.postJson('/huatiType', param);
+    },
+    delete(param) {
+      return Ajax.delete('/huatiType', param);
+    }
   }
 };
 

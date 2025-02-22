@@ -51,7 +51,13 @@ router.get('/alicloud/sendSMS', alicloudController.sendSMS);
 
 let userGroupController =  require('../controller/userGroupController.js');
 router.get('/userGroups', userGroupController.gets);
-router.get('/userGroup', userGroupController.gets);
+router.get('/userGroup', userGroupController.get);
 router.post('/userGroup', userGroupController.post);
+
+let huatiTypeController =  require('../controller/huatiTypeController.js');
+router.get('/huatiTypes', huatiTypeController.gets);
+router.get('/huatiType', huatiTypeController.get);
+router.post('/huatiType', huatiTypeController.post);
+router.delete('/huatiType',huatiTypeController.delete);
 
 module.exports = router;

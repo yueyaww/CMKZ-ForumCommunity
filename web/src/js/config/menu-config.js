@@ -28,6 +28,11 @@ const fullMenus = [
         title: '个人中心',
         key: 'Gerenzhongxin',
       	icon: 'icon-head'
+      },
+      {
+        title: '社区配置',
+        key: 'ShequPeizhi',
+      	icon: 'icon-layout'
       }
     ]
   }
