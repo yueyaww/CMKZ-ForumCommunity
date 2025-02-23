@@ -53,11 +53,18 @@ let userGroupController =  require('../controller/userGroupController.js');
 router.get('/userGroups', userGroupController.gets);
 router.get('/userGroup', userGroupController.get);
 router.post('/userGroup', userGroupController.post);
+router.delete('/userGroup',userGroupController.delete);
 
 let huatiTypeController =  require('../controller/huatiTypeController.js');
 router.get('/huatiTypes', huatiTypeController.gets);
 router.get('/huatiType', huatiTypeController.get);
 router.post('/huatiType', huatiTypeController.post);
 router.delete('/huatiType',huatiTypeController.delete);
+
+let userHuatiTypeController =  require('../controller/userHuatiTypeController.js');
+router.get('/userHuatiTypes', userHuatiTypeController.gets);
+router.get('/userHuatiType', userHuatiTypeController.get);
+router.post('/userHuatiType', userHuatiTypeController.post);
+router.delete('/userHuatiType',userHuatiTypeController.delete);
 
 module.exports = router;

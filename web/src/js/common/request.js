@@ -75,6 +75,9 @@ const Request = {
     },
     save(param) {
       return Ajax.postJson('/userGroup', param);
+    },
+    delete(param) {
+      return Ajax.delete('/userGroup', param);
     }
   },
   HuatiType:{
@@ -89,6 +92,20 @@ const Request = {
     },
     delete(param) {
       return Ajax.delete('/huatiType', param);
+    }
+  },
+  UserHuatiType:{
+    get(param) {
+      return Ajax.get('/userHuatiType', param);
+    },
+    gets(param) {
+      return Ajax.get('/userHuatiTypes', param);
+    },
+    save(param) {
+      return Ajax.postJson('/userHuatiType', param);
+    },
+    delete(param) {
+      return Ajax.delete('/userHuatiType', param);
     }
   }
 };

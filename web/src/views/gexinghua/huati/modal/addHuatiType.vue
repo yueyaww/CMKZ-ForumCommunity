@@ -89,6 +89,7 @@
           社区: this.shequId,
           类型名称: "",
           特征: '常规',
+          用户: '',
           
           标题阅读权限: {
             用户组: '所有人',
@@ -135,12 +136,13 @@
       };
     },
     mounted() {
+      this.model.用户 = Utils.getSessionLocal2Json("token-session")._id;
     },
     methods: {
       success() {
         let validResult = this.$refs.form.valid();
         if (validResult.result) {
-        	R.HuatiType.save(this.model).then(res =>{
+        	R.UserHuatiType.save(this.model).then(res =>{
         		if (res.ok) {
         		  this.$Notice({
         		    type: 'success',
@@ -172,7 +174,6 @@
             events: {
               success: (modal, data) => {
                 data.独立用户们 = data;
-                console.log(data);
               }
             }
           });

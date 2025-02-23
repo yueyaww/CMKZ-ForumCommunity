@@ -18,4 +18,9 @@ export default [{
   name: 'ShequPeizhi',
   component: (resolve) => require(['views/shequ-peizhi/index'], resolve),
   meta: { title: '社区配置', icon: 'icon-head', auth: true }
+},{
+  path: '/gexinghuahuati',
+  name: 'GeXingHuaHuaTi',
+  component: (resolve) => require(['views/gexinghua/huati/index'], resolve),
+  meta: { title: '个性化-话题', icon: 'icon-paper', auth: true }
 }];

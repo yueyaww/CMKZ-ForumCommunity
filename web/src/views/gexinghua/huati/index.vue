@@ -6,7 +6,6 @@
           <div class="h-panel-bar">
             <span class="h-panel-title">社区列表</span>
             <div style="float:right" class="h-btn-group">
-              <Button color="green" @click="addShequ">创建</Button>
             </div>
           </div>
           <div class="h-panel-body" v-if="height" style="overflow:auto;padding-top: 10px;" :style="'height:'+height+'px;'">
@@ -53,7 +52,6 @@
 </template>
 
 <script>
-  import ModalAddShequ from "./modal/addShequ.vue";
   import ModalAddHuatiType from "./modal/addHuatiType.vue";
   
   export default {
@@ -76,22 +74,6 @@
       this.getShequs();
     },
     methods: {
-      addShequ(){
-        this.$Modal({
-          middle: true,
-          hasDivider: true,
-          closeOnMask: false,
-          component: {
-            vue: ModalAddShequ,
-            datas: {}
-          },
-          events: {
-            success: (modal, data) => {
-              this.getShequs();
-            }
-          }
-        });
-      },
       getShequs() {
         R.Shequ.gets().then(resp => {
           if (resp.ok) {
@@ -134,7 +116,7 @@
         });
       },
       getHuatiTypes(){
-        R.HuatiType.gets({社区: this.shequ._id}).then(resp => {
+        R.UserHuatiType.gets({社区: this.shequ._id}).then(resp => {
           if (resp.ok) {
             this.huatiTypes = resp.body;
           }
@@ -142,7 +124,7 @@
       },
       delHuatiType(data){
       	this.$Confirm('确定删除？', '提示').then(() => {
-      	  R.HuatiType.delete({'ids': [data._id]}).then(res =>{
+      	  R.UserHuatiType.delete({'ids': [data._id]}).then(res =>{
             if(res.ok){
               this.$Notice({
                 type: 'success',

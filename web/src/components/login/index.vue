@@ -308,7 +308,7 @@
         });
       },
       denglu_anniu() {
-        if(this.登录模型.验证码 !=  this.captchaText.toLowerCase()){
+        if((this.登录模型.验证码).toLowerCase() !=  this.captchaText.toLowerCase()){
           this.$Message({
             type: "error",
             text: `验证码不正确`
@@ -329,6 +329,12 @@
       denglu(user){
         Utils.saveCookie('token-cookie', user._id, null, "/", 60);
         Utils.saveSessionLocal('token-session', user);
+        
+        let menus = [];
+        for (let 角色 of user.角色) {
+          menus.push(...角色.menus);
+        }
+        G.set('SYS_MENUS', menus);
         
         this.$router.push({
           path: "/"

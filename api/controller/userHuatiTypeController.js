@@ -1,21 +1,21 @@
-let UserGroup = require('../model/UserGroup.js');
+let UserHuatiType = require('../model/UserHuatiType.js');
 
 exports.post = (req,res) =>{
 	let param = req.body;
-	let userGroup = new UserGroup(param);
+	let userHuatiType = new UserHuatiType(param);
 	if(param._id){
-		UserGroup.updateOne({_id: param._id}, userGroup, err =>{});
+		UserHuatiType.updateOne({_id: param._id}, userHuatiType, err =>{});
 	}else{
-		userGroup.save();
+		userHuatiType.save();
 	}
 	res.json({
 		status: 200,
-		body: userGroup
+		body: userHuatiType
 	});
 };
 
-exports.gets = (req,res) =>{
-	UserGroup.find()
+exports.gets = (req, res) =>{
+	UserHuatiType.find({'社区': req.query.社区})
 	.populate('用户')
 	.exec((err,docs) =>{
 		if(!err){
@@ -30,7 +30,7 @@ exports.gets = (req,res) =>{
 };
 
 exports.get = (req,res) =>{
-	UserGroup.findOne()
+	UserHuatiType.findOne()
 	.where({'_id': req.query.id})
 	.exec((err,doc) =>{
 		if(!err){
@@ -46,7 +46,7 @@ exports.get = (req,res) =>{
 
 exports.delete = (req,res) =>{
 	let param = req.body;
-	UserGroup.deleteMany({'_id': {$in: param.ids}}, err =>{});
+	UserHuatiType.deleteMany({'_id': {$in: param.ids}}, err =>{});
 	res.json({
 		status: 200
 	});

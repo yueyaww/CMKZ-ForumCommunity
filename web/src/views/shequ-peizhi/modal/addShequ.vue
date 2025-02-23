@@ -10,6 +10,9 @@
         <FormItem label="简称:" prop="简称">
           <input type="text" v-model="model.简称" v-wordlimit='2'>
         </FormItem>
+        <FormItem label="特征:" prop="特征">
+          <Select  v-model="model.特征" :multiple="true" :datas="['常规', '付费', '私密']" :deletable="false"></Select>
+        </FormItem>
       </Form>
     </div>
     <!-- h-modal-footer 将自带modal底部样式 -->
@@ -28,7 +31,8 @@
       return {
         model: {
           社区名: "",
-          简称: ''
+          简称: '',
+          特征: ['常规']
         },
         validationRules: {
           required: ['社区名','简称']

@@ -7,6 +7,7 @@
             <span class="h-panel-title">用户组</span>
             <div style="float:right" class="h-btn-group">
               <Button color="green" @click="add">创建</Button>
+              <Button color="red" @click="del">删除</Button>
             </div>
           </div>
           <div class="h-panel-body" v-if="height" style="overflow:auto;padding-top: 10px;" :style="'height:'+height+'px;'">
@@ -110,6 +111,27 @@
               this.getUserGroups();
             }
           }
+        });
+      },
+      del(){
+        this.$Confirm('确定删除？', '提示').then(() => {
+          R.UserGroup.delete({'ids': [this.userGroup._id]}).then(res =>{
+            if(res.ok){
+              this.$Notice({
+                type: 'success',
+                title: "成功",
+                content: "删除"
+              });
+              this.getUserGroups();
+            }else{
+              this.$Notice({
+                type: 'warn',
+                title: "失败",
+                content: res.msg
+              });
+            }
+          });
+        }).catch(() => {
         });
       }
     }

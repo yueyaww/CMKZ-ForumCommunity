@@ -5,6 +5,18 @@ const fullMenus = [
     icon: 'icon-monitor'
   },
   {
+    title: '个性化',
+    key: 'GeXingHua',
+    icon: 'icon-toggle',
+    children: [
+      {
+        title: '话题',
+        key: 'GeXingHuaHuaTi',
+      	icon: 'icon-paper'
+      }
+    ]
+  },
+  {
     title: '设置',
     key: 'SysSetting',
     icon: 'icon-cog',
