@@ -89,6 +89,12 @@ export default {
       });
     },
     huatiSelect(data){
+      window.open(this.$router.resolve({
+        path: `/huati/view/${data._id}`
+      }).href, '_blank');
+      
+      return;
+      
       this.$Modal({
         hasCloseIcon: true,
         fullScreen: true,
@@ -103,6 +109,13 @@ export default {
       });
     },
     addHuati(){
+      window.open(this.$router.resolve({
+        path: `/huati/edit/new`,
+        query: {'shequId': this.selectShequ}
+      }).href, '_blank');
+      
+      return;
+      
       if(this.selectShequ == null){
         this.$Notice({
           type: 'error',

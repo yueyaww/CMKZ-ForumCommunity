@@ -41,6 +41,9 @@ const Request = {
     save(param) {
       return Ajax.postJson('/huati', param);
     },
+    get(param) {
+      return Ajax.get('/huati', param);
+    },
     page(param) {
       return Ajax.postJson('/huati/page',param);
     }

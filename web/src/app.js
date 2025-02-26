@@ -9,6 +9,8 @@ import 'js/vue/components';
 import 'js/vue/filters';
 import config from '../config.json';
 
+import { io } from 'socket.io-client';
+
 require('./css/app.less');
 
 heyuiConfig();

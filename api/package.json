@@ -24,6 +24,7 @@
     "node-wmic": "^2.0.0",
     "pug": "2.0.0-beta11",
     "soap": "^0.29.0",
+    "socket.io": "^4.8.1",
     "sync-request": "^6.1.0"
   }
 }

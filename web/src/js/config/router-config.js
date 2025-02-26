@@ -15,7 +15,25 @@ const initRouter = () => {
       path: '/login',
       name: 'Login',
       component: (resolve) => require(['components/login/index'], resolve)
-    }, {
+    },
+    {
+      path: '/huati/edit/:id',
+      name: 'HuatiEdit',
+      component: (resolve) => require(['views/huati/edit'], resolve),
+      meta: {
+        title: '话题',
+        icon: 'icon-paper'
+      }
+    },
+    {
+      path: '/huati/view/:id',
+      name: 'HuatiView',
+      component: (resolve) => require(['views/huati/view'], resolve),
+      meta: {
+        title: '话题',
+        icon: 'icon-paper'
+      }
+    },{
       path: '/',
       component: (resolve) => require(['components/app/app-frame'], resolve),
       children: [{

@@ -6,6 +6,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 const NodeCache = require( "node-cache" );
 const bodyParser = require('body-parser');
+const http = require('http');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -27,10 +28,10 @@ db.once('open', function() {
   console.log(config.dbName+ ' mongoDB已连接 '+ config.ctx);
 });
 
+var app = express();
+
 //启动备份
 // dbBackupController.doBackup();
- 
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

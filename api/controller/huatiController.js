@@ -1,4 +1,5 @@
 let Huati = require('../model/Huati.js');
+let Socket = require('../service/socket.js');
 
 exports.post = (req,res) =>{
 	let param = req.body;
@@ -7,6 +8,7 @@ exports.post = (req,res) =>{
 		Huati.updateOne({_id: param._id}, huati, err =>{});
 	}else{
 		huati.save();
+		Socket.sendAllMessage();
 	}
 	res.json({
 		status: 200,

@@ -160,6 +160,7 @@
   import Thpace from "@/js/plug-in/thpace.js";
   import delaunator from "@/js/plug-in/delaunator.min.js";
   import lottiePlayer from "@lottiefiles/lottie-player";
+  import socket from '@/js/common/socket';
   
   export default {
     components: {
@@ -327,6 +328,7 @@
         });
       },
       denglu(user){
+        
         Utils.saveCookie('token-cookie', user._id, null, "/", 60);
         Utils.saveSessionLocal('token-session', user);
         
@@ -340,6 +342,11 @@
           path: "/"
         });
         this.spaceboi.stop();
+        
+        socket.emit('sendMessage', {
+          userId: user._id, // 指定接收消息的用户 ID
+          socketId: socket.id, // 发送的消息内容
+        });
       },
       // 生成验证码图片
       generateCaptchaImage(text) {

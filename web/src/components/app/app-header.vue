@@ -103,6 +103,7 @@
 <script>
 import { mapState } from 'vuex';
 import appHeaderMessage from './modules/app-header-message';
+import socket from '@/js/common/socket';
 
 export default {
   components: {
@@ -130,6 +131,31 @@ export default {
   },
   mounted() {
     this.listenResize();
+    socket.on('receiveMessage', (data) => {
+      // 首先，让我们检查我们是否有权限发出通知
+      if (window.Notification && Notification.permission !== "denied") {
+        // 如果没有，我们就请求获得权限(仅限第一次)
+        Notification.requestPermission(function (status) {
+          if (Notification.permission !== status) {
+            Notification.permission = status;
+          }
+        // 如果用户同意了
+        if (status === "granted") {
+          //设置发送消息
+          let options={
+            body:'有新消息',
+          }
+          //创建提示
+          new Notification("Hi!",options);
+        }	
+        });
+      }else{
+        this.$Message({
+          type: "error",
+          text: `未获得权限。`
+        });
+      }
+    });
   },
   methods: {
     listenResize() {
